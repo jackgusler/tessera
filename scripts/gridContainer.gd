@@ -44,6 +44,7 @@ func _handle_left_click() -> void:
 		return
 	var t := Tile.new()
 	t.source_id = 1
+	t.rotation = current_rotation
 	place_tile(cell, t)
 
 func _handle_right_click() -> void:
