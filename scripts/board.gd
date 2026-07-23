@@ -32,11 +32,12 @@ func is_empty(cell: Vector2i) -> bool:
 	
 func place_tile(cell: Vector2i, tile: Variant) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
-	assert(is_empty(cell))
+	assert(is_empty(cell), "place_tile on occupied cell: %s" % cell)
 	grid[cell.y][cell.x] = tile
 
 func remove_tile(cell: Vector2i) -> void:
-	place_tile(cell, null)
+	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
+	grid[cell.y][cell.x] = null
 	
 func clear() -> void:
 	_build_grid()
