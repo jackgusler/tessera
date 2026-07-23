@@ -1,8 +1,85 @@
-[gd_scene format=3 uid="uid://d2oxca3mm1nrh"]
+[gd_scene format=4 uid="uid://d2oxca3mm1nrh"]
 
 [ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
+[ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
+[ext_resource type="Texture2D" uid="uid://b8gbc5bpbxn4c" path="res://assets/conveyor/corner.png" id="3_tefeu"]
+[ext_resource type="Texture2D" uid="uid://c64bup3t8bci6" path="res://assets/conveyor/straight.png" id="4_o6xl0"]
+[ext_resource type="Texture2D" uid="uid://dy82rkrc8xps8" path="res://assets/conveyor/corner_opposite.png" id="5_tipki"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_85g3d"]
+texture = ExtResource("2_tbgi4")
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_choun"]
+sources/0 = SubResource("TileSetAtlasSource_85g3d")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ya4ey"]
+texture = ExtResource("3_tefeu")
+0:0/animation_speed = 10.0
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/animation_frame_4/duration = 1.0
+0:0/animation_frame_5/duration = 1.0
+0:0/animation_frame_6/duration = 1.0
+0:0/animation_frame_7/duration = 1.0
+0:0/animation_frame_8/duration = 1.0
+0:0/animation_frame_9/duration = 1.0
+0:0/animation_frame_10/duration = 1.0
+0:0/animation_frame_11/duration = 1.0
+0:0/animation_frame_12/duration = 1.0
+0:0/animation_frame_13/duration = 1.0
+0:0/animation_frame_14/duration = 1.0
+0:0/animation_frame_15/duration = 1.0
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eb6dy"]
+texture = ExtResource("4_o6xl0")
+0:0/animation_speed = 10.0
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/animation_frame_4/duration = 1.0
+0:0/animation_frame_5/duration = 1.0
+0:0/animation_frame_6/duration = 1.0
+0:0/animation_frame_7/duration = 1.0
+0:0/animation_frame_8/duration = 1.0
+0:0/animation_frame_9/duration = 1.0
+0:0/animation_frame_10/duration = 1.0
+0:0/animation_frame_11/duration = 1.0
+0:0/animation_frame_12/duration = 1.0
+0:0/animation_frame_13/duration = 1.0
+0:0/animation_frame_14/duration = 1.0
+0:0/animation_frame_15/duration = 1.0
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_trceg"]
+texture = ExtResource("5_tipki")
+0:0/animation_speed = 10.0
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/animation_frame_4/duration = 1.0
+0:0/animation_frame_5/duration = 1.0
+0:0/animation_frame_6/duration = 1.0
+0:0/animation_frame_7/duration = 1.0
+0:0/animation_frame_8/duration = 1.0
+0:0/animation_frame_9/duration = 1.0
+0:0/animation_frame_10/duration = 1.0
+0:0/animation_frame_11/duration = 1.0
+0:0/animation_frame_12/duration = 1.0
+0:0/animation_frame_13/duration = 1.0
+0:0/animation_frame_14/duration = 1.0
+0:0/animation_frame_15/duration = 1.0
+0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_o5qli"]
+sources/0 = SubResource("TileSetAtlasSource_ya4ey")
+sources/1 = SubResource("TileSetAtlasSource_eb6dy")
+sources/2 = SubResource("TileSetAtlasSource_trceg")
 
 [node name="main" type="Node2D" unique_id=1158318171]
 script = ExtResource("1_o5qli")
@@ -12,5 +89,18 @@ texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(4, 4)
 
-[node name="TileMapLayer" type="TileMapLayer" parent="GridContainer" unique_id=1614143978]
+[node name="ColorRect" type="ColorRect" parent="GridContainer" unique_id=839329519]
+custom_minimum_size = Vector2(480, 270)
+offset_left = -240.0
+offset_top = -135.0
+offset_right = 240.0
+offset_bottom = 135.0
+color = Color(0.87058824, 0.85490197, 0.79607844, 1)
+
+[node name="Grid" type="TileMapLayer" parent="GridContainer" unique_id=107034912]
+tile_map_data = PackedByteArray("AAD/////AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAD+//7/AAAAAAAAAAD9//3/AAAAAAAAAAD+//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAACAP3/AAAAAAAAAAACAAIAAAAAAAAAAAACAAEAAAAAAAAAAAACAAAAAAAAAAAAAAACAP//AAAAAAAAAAACAP7/AAAAAAAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAD9/wIAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wAAAAAAAAAAAAD9////AAAAAAAAAAD9//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAAAAAAAAAAAAAABAP//AAAAAAAAAAABAP7/AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAABAAEAAAAAAAAAAAD+/wEAAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_choun")
+
+[node name="Placeable" type="TileMapLayer" parent="GridContainer" unique_id=1614143978]
+tile_map_data = PackedByteArray("AAD9////AQAAAAAAAFD+////AQAAAAAAAFD/////AQAAAAAAAFAAAP//AQAAAAAAAFABAP//AQAAAAAAAFACAP//AQAAAAAAAFA=")
 tile_set = SubResource("TileSet_o5qli")
