@@ -97,6 +97,7 @@ offset_left = -240.0
 offset_top = -135.0
 offset_right = 240.0
 offset_bottom = 135.0
+mouse_filter = 2
 color = Color(0.87058824, 0.85490197, 0.79607844, 1)
 
 [node name="Grid" type="TileMapLayer" parent="GridContainer" unique_id=107034912]
