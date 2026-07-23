@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="TileType" format=3 uid="uid://bswko1c7yfoe"]
 
-[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_43qlo"]
+[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_ygbei"]
 
 [resource]
-script = ExtResource("1_43qlo")
-display_name = "Stright"
+script = ExtResource("1_ygbei")
+display_name = "Straight"
 source_id = 1
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"

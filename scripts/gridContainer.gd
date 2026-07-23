@@ -106,8 +106,8 @@ func get_neighbors(cell: Vector2i) -> Array[Vector2i]:
 			out.append(n)
 	return out
 	
-func _rotation_to_alt(rotation: int) -> int:
-	match rotation:
+func _rotation_to_alt(rot: int) -> int:
+	match rot:
 		1: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H
 		2: return TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
 		3: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
