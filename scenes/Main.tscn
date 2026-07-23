@@ -3,7 +3,11 @@
 [ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
 [ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/gridContainer.gd" id="2_tefeu"]
+[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="3_tipki"]
+[ext_resource type="Resource" uid="uid://bswko1c7yfoe" path="res://tiles/conveyors/straight.tres" id="4_85g3d"]
 [ext_resource type="TileSet" uid="uid://cxn6vfulhaveq" path="res://assets/TileSets/conveyors.tres" id="4_jyhfs"]
+[ext_resource type="Resource" uid="uid://fkh1spgsp3hh" path="res://tiles/conveyors/corner_left.tres" id="5_choun"]
+[ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://tiles/conveyors/corner_right.tres" id="6_ya4ey"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_85g3d"]
 texture = ExtResource("2_tbgi4")
@@ -20,6 +24,7 @@ texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(4, 4)
 script = ExtResource("2_tefeu")
+tile_types = Array[ExtResource("3_tipki")]([ExtResource("4_85g3d"), ExtResource("5_choun"), ExtResource("6_ya4ey")])
 
 [node name="ColorRect" type="ColorRect" parent="GridContainer" unique_id=839329519]
 custom_minimum_size = Vector2(480, 270)

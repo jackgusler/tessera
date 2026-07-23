@@ -8,8 +8,10 @@ extends Node2D
 @export var grid_width: int = 6
 @export var grid_height: int = 6
 @export var cell_size: int = 16
-
+@export var tile_types: Array[TileType]
+var current_type_index: int = 0
 var current_rotation: int = 0   # 0..3
+
 
 const GRID_ORIGIN := Vector2i(-3, -3)
 const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
@@ -47,7 +49,7 @@ func _handle_left_click() -> void:
 	if not is_empty(cell):
 		return
 	var t := Tile.new()
-	t.source_id = 1
+	t.type = current_type()
 	t.rotation = current_rotation
 	place_tile(cell, t)
 
@@ -68,7 +70,8 @@ func _update_ghost() -> void:
 		return
 	if not is_empty(cell):
 		return
-	preview.set_cell(board_to_map(cell), 1, Vector2i(0, 0), _rotation_to_alt(current_rotation))
+	var type := current_type()
+	preview.set_cell(board_to_map(cell), type.source_id, type.atlas_coords, _rotation_to_alt(current_rotation))
 
 func is_in_bounds(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.y >= 0 and cell.x < grid_width and cell.y < grid_height
@@ -84,7 +87,7 @@ func place_tile(cell: Vector2i, tile: Tile) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
 	assert(is_empty(cell), "place_tile on occupied cell: %s" % cell)
 	grid[cell.y][cell.x] = tile
-	placeable.set_cell(board_to_map(cell), tile.source_id, tile.atlas_coords, _rotation_to_alt(tile.rotation))
+	placeable.set_cell(board_to_map(cell), tile.type.source_id, tile.type.atlas_coords, _rotation_to_alt(tile.rotation))
 
 func remove_tile(cell: Vector2i) -> void:
 	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
@@ -110,6 +113,9 @@ func _rotation_to_alt(rotation: int) -> int:
 		3: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
 		_: return 0
 		
+func current_type() -> TileType:
+	return tile_types[current_type_index]
+
 func _cell_under_mouse() -> Vector2i:
 	return map_to_board(placeable.local_to_map(placeable.get_local_mouse_position()))
 
