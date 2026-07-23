@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
+[ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/gridContainer.gd" id="2_tefeu"]
 [ext_resource type="Texture2D" uid="uid://b8gbc5bpbxn4c" path="res://assets/conveyor/corner.png" id="3_tefeu"]
 [ext_resource type="Texture2D" uid="uid://c64bup3t8bci6" path="res://assets/conveyor/straight.png" id="4_o6xl0"]
 [ext_resource type="Texture2D" uid="uid://dy82rkrc8xps8" path="res://assets/conveyor/corner_opposite.png" id="5_tipki"]
@@ -88,6 +89,7 @@ script = ExtResource("1_o5qli")
 texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(4, 4)
+script = ExtResource("2_tefeu")
 
 [node name="ColorRect" type="ColorRect" parent="GridContainer" unique_id=839329519]
 custom_minimum_size = Vector2(480, 270)
@@ -102,5 +104,4 @@ tile_map_data = PackedByteArray("AAD/////AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAA
 tile_set = SubResource("TileSet_choun")
 
 [node name="Placeable" type="TileMapLayer" parent="GridContainer" unique_id=1614143978]
-tile_map_data = PackedByteArray("AAD9////AQAAAAAAAFD+////AQAAAAAAAFD/////AQAAAAAAAFAAAP//AQAAAAAAAFABAP//AQAAAAAAAFACAP//AQAAAAAAAFA=")
 tile_set = SubResource("TileSet_o5qli")

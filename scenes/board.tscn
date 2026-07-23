@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://dcilxiplraum8"]
-
-[ext_resource type="Script" path="res://scripts/board.gd" id="1_board"]
-
-[node name="board" type="Node2D" unique_id=747127852]
-script = ExtResource("1_board")

@@ -1,10 +1,14 @@
-class_name Board
+class_name gridContainer
 extends Node2D
+
+@onready var placeable: TileMapLayer = $Placeable
+@onready var grid_layer: TileMapLayer = $Grid
 
 @export var grid_width: int = 6
 @export var grid_height: int = 6
 @export var cell_size: int = 16
 
+const GRID_ORIGIN := Vector2i(-3, -3)
 const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
 var grid: Array
@@ -34,6 +38,7 @@ func place_tile(cell: Vector2i, tile: Variant) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
 	assert(is_empty(cell), "place_tile on occupied cell: %s" % cell)
 	grid[cell.y][cell.x] = tile
+	placeable.set_cell(board_to_map(cell))
 
 func remove_tile(cell: Vector2i) -> void:
 	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
@@ -49,3 +54,9 @@ func get_neighbors(cell: Vector2i) -> Array[Vector2i]:
 		if is_in_bounds(n):
 			out.append(n)
 	return out
+	
+func board_to_map(cell: Vector2i) -> Vector2i:
+	return cell + GRID_ORIGIN
+
+func map_to_board(map_cell: Vector2i) -> Vector2i:
+	return map_cell - GRID_ORIGIN
