@@ -14,5 +14,5 @@ config/icon="res://icon.svg"
 
 [rendering]
 
-; Pixel-art: nearest-neighbour filtering (flat 32×32 art) — firm decision, not a ticket.
+; Pixel-art: nearest-neighbour filtering (flat 16×16 art) — firm decision, not a ticket.
 textures/canvas_textures/default_texture_filter=0
