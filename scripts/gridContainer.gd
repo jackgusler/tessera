@@ -8,6 +8,8 @@ extends Node2D
 @export var grid_height: int = 6
 @export var cell_size: int = 16
 
+var current_rotation: int = 0   # 0..3
+
 const GRID_ORIGIN := Vector2i(-3, -3)
 const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
@@ -27,8 +29,10 @@ func _build_grid() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_handle_left_click()
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		_handle_right_click()
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+		current_rotation = (current_rotation + 1) % 4
 
 func _handle_left_click() -> void:
 	var local := placeable.get_local_mouse_position()
@@ -66,7 +70,7 @@ func place_tile(cell: Vector2i, tile: Tile) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
 	assert(is_empty(cell), "place_tile on occupied cell: %s" % cell)
 	grid[cell.y][cell.x] = tile
-	placeable.set_cell(board_to_map(cell), tile.source_id, tile.atlas_coords )
+	placeable.set_cell(board_to_map(cell), tile.source_id, tile.atlas_coords, _rotation_to_alt(tile.rotation))
 
 func remove_tile(cell: Vector2i) -> void:
 	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
@@ -85,6 +89,13 @@ func get_neighbors(cell: Vector2i) -> Array[Vector2i]:
 			out.append(n)
 	return out
 	
+func _rotation_to_alt(rotation: int) -> int:
+	match rotation:
+		1: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H
+		2: return TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
+		3: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
+		_: return 0
+
 func board_to_map(cell: Vector2i) -> Vector2i:
 	return cell + GRID_ORIGIN
 
