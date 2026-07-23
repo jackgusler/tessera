@@ -1,0 +1,18 @@
+; Engine configuration file.
+; Tessera — grid tile-placement synergy roguelike.
+; NOTE: window/viewport resolution and grid dimensions are intentionally left at
+; minimal defaults here — they are open decision tickets (see Jira TES).
+
+config_version=5
+
+[application]
+
+config/name="Tessera"
+run/main_scene="res://scenes/Main.tscn"
+config/features=PackedStringArray("4.6", "Forward Plus")
+config/icon="res://icon.svg"
+
+[rendering]
+
+; Pixel-art: nearest-neighbour filtering (flat 32×32 art) — firm decision, not a ticket.
+textures/canvas_textures/default_texture_filter=0
