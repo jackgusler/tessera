@@ -1,8 +1,9 @@
 class_name gridContainer
 extends Node2D
 
-@onready var placeable: TileMapLayer = $Placeable
 @onready var grid_layer: TileMapLayer = $Grid
+@onready var placeable: TileMapLayer = $Placeable
+@onready var preview: TileMapLayer = $Preview
 
 @export var grid_width: int = 6
 @export var grid_height: int = 6
@@ -14,6 +15,9 @@ const GRID_ORIGIN := Vector2i(-3, -3)
 const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
 var grid: Array
+
+func _process(_delta: float) -> void:
+	_update_ghost()
 
 func _ready() -> void:
 	_build_grid()
@@ -56,6 +60,15 @@ func _handle_right_click() -> void:
 	if is_empty(cell):
 		return
 	remove_tile(cell)
+	
+func _update_ghost() -> void:
+	preview.clear()
+	var cell := _cell_under_mouse()
+	if not is_in_bounds(cell):
+		return
+	if not is_empty(cell):
+		return
+	preview.set_cell(board_to_map(cell), 1, Vector2i(0, 0), _rotation_to_alt(current_rotation))
 
 func is_in_bounds(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.y >= 0 and cell.x < grid_width and cell.y < grid_height
@@ -96,6 +109,9 @@ func _rotation_to_alt(rotation: int) -> int:
 		2: return TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
 		3: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
 		_: return 0
+		
+func _cell_under_mouse() -> Vector2i:
+	return map_to_board(placeable.local_to_map(placeable.get_local_mouse_position()))
 
 func board_to_map(cell: Vector2i) -> Vector2i:
 	return cell + GRID_ORIGIN
