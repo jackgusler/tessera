@@ -3,3 +3,6 @@ extends Node2D
 
 func _ready() -> void:
 	print("Tessera booting — grid tile-placement synergy roguelike scaffold OK")
+	var t := Tile.new()
+	t.source_id = 1
+	place_tile(Vector2i(0, 0), t)   # should paint at tilemap cell (-3,-3)

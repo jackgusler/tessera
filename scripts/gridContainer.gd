@@ -38,7 +38,7 @@ func place_tile(cell: Vector2i, tile: Tile) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
 	assert(is_empty(cell), "place_tile on occupied cell: %s" % cell)
 	grid[cell.y][cell.x] = tile
-	placeable.set_cell(board_to_map(cell), tile.source_id, tile.atlast_coords)
+	placeable.set_cell(board_to_map(cell), tile.source_id, tile.atlas_coords )
 
 func remove_tile(cell: Vector2i) -> void:
 	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
@@ -47,6 +47,7 @@ func remove_tile(cell: Vector2i) -> void:
 	
 func clear() -> void:
 	_build_grid()
+	placeable.clear()
 	
 func get_neighbors(cell: Vector2i) -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
