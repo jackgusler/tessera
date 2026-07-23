@@ -23,6 +23,24 @@ func _build_grid() -> void:
 		for x in grid_width:
 			row.append(null)
 		grid.append(row)
+		
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		print("clciking")
+		_handle_click()
+
+func _handle_click() -> void:
+	print("click_")
+	var local := placeable.get_local_mouse_position()
+	var map_cell := placeable.local_to_map(local)
+	var cell := map_to_board(map_cell)
+	if not is_in_bounds(cell):
+		return
+	if not is_empty(cell):
+		return
+	var t := Tile.new()
+	t.source_id = 1
+	place_tile(cell, t)
 
 func is_in_bounds(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.y >= 0 and cell.x < grid_width and cell.y < grid_height
