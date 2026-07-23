@@ -27,22 +27,23 @@ func _build_grid() -> void:
 func is_in_bounds(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.y >= 0 and cell.x < grid_width and cell.y < grid_height
 
-func get_tile(cell: Vector2i) -> Variant:
+func get_tile(cell: Vector2i) -> Tile:
 	assert(is_in_bounds(cell), "get_tile out of bounds: %s" % cell)
 	return grid[cell.y][cell.x]
 
 func is_empty(cell: Vector2i) -> bool:
 	return get_tile(cell) == null
 	
-func place_tile(cell: Vector2i, tile: Variant) -> void:
+func place_tile(cell: Vector2i, tile: Tile) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
 	assert(is_empty(cell), "place_tile on occupied cell: %s" % cell)
 	grid[cell.y][cell.x] = tile
-	placeable.set_cell(board_to_map(cell))
+	placeable.set_cell(board_to_map(cell), tile.source_id, tile.atlast_coords)
 
 func remove_tile(cell: Vector2i) -> void:
 	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
 	grid[cell.y][cell.x] = null
+	placeable.erase_cell(board_to_map(cell))
 	
 func clear() -> void:
 	_build_grid()
