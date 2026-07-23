@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://d2oxca3mm1nrh"]
 
 [ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
+[ext_resource type="Script" uid="uid://dayrljv6d8x52" path="res://scenes/hotbar.gd" id="2_85g3d"]
 [ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
 [ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/gridContainer.gd" id="2_tefeu"]
 [ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="3_tipki"]
@@ -18,6 +19,14 @@ sources/0 = SubResource("TileSetAtlasSource_85g3d")
 
 [node name="main" type="Node2D" unique_id=1158318171]
 script = ExtResource("1_o5qli")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=512045358]
+
+[node name="Hotbar" type="HBoxContainer" parent="CanvasLayer" unique_id=1816668313 node_paths=PackedStringArray("board")]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_85g3d")
+board = NodePath("../../GridContainer")
 
 [node name="GridContainer" type="Node2D" parent="." unique_id=96922754]
 texture_filter = 1
