@@ -2,5 +2,15 @@
 
 [ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
 
+[sub_resource type="TileSet" id="TileSet_o5qli"]
+
 [node name="main" type="Node2D" unique_id=1158318171]
 script = ExtResource("1_o5qli")
+
+[node name="GridContainer" type="Node2D" parent="." unique_id=96922754]
+texture_filter = 1
+position = Vector2(960, 540)
+scale = Vector2(4, 4)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="GridContainer" unique_id=1614143978]
+tile_set = SubResource("TileSet_o5qli")
