@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1gqkjt1a2y2q"
-path="res://.godot/imported/downgrader.png-dd62df6cc1bd86df171b7cc5f6c47887.ctex"
+uid="uid://dx42usfsx0862"
+path="res://.godot/imported/adder.png-37287a7b684a9c35620bf6fe83c0d0a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/downgrader.png"
-dest_files=["res://.godot/imported/downgrader.png-dd62df6cc1bd86df171b7cc5f6c47887.ctex"]
+source_file="res://assets/pngs/modifiers/adder.png"
+dest_files=["res://.godot/imported/adder.png-37287a7b684a9c35620bf6fe83c0d0a2.ctex"]
 
 [params]
 

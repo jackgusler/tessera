@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dy82rkrc8xps8"
-path="res://.godot/imported/corner_opposite.png-83b5b913079fe27430564c64fe3633e6.ctex"
+uid="uid://devdtj0k6hwu5"
+path="res://.godot/imported/output.png-83ad325cf5f16f6522e2bb3dd2a24808.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/conveyor/corner_opposite.png"
-dest_files=["res://.godot/imported/corner_opposite.png-83b5b913079fe27430564c64fe3633e6.ctex"]
+source_file="res://assets/pngs/base/output.png"
+dest_files=["res://.godot/imported/output.png-83ad325cf5f16f6522e2bb3dd2a24808.ctex"]
 
 [params]
 

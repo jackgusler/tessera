@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chsnj0osj8au4"
-path="res://.godot/imported/multiplier.png-9cc2179ade77cb36591b82403e596c8c.ctex"
+uid="uid://clfnwo8dghqta"
+path="res://.godot/imported/downgrader.png-f15b0c6dc935002f1e079ddb5fe45267.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/multiplier.png"
-dest_files=["res://.godot/imported/multiplier.png-9cc2179ade77cb36591b82403e596c8c.ctex"]
+source_file="res://assets/pngs/modifiers/downgrader.png"
+dest_files=["res://.godot/imported/downgrader.png-f15b0c6dc935002f1e079ddb5fe45267.ctex"]
 
 [params]
 

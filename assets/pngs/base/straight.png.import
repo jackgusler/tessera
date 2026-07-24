@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cgs0lsjf4n8a8"
-path="res://.godot/imported/splitter.png-bc88f2fd9c7470af76c80eb6209ce93b.ctex"
+uid="uid://oi7gkkxmmmnl"
+path="res://.godot/imported/straight.png-570f70b8ed06ebc4c01581d200b6a0b2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/splitter.png"
-dest_files=["res://.godot/imported/splitter.png-bc88f2fd9c7470af76c80eb6209ce93b.ctex"]
+source_file="res://assets/pngs/base/straight.png"
+dest_files=["res://.godot/imported/straight.png-570f70b8ed06ebc4c01581d200b6a0b2.ctex"]
 
 [params]
 

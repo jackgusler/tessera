@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djru301pjxqfk"
-path="res://.godot/imported/generator.png-e75b58cc764bb4155b2713aaf3a62529.ctex"
+uid="uid://bwtwjb0wwbone"
+path="res://.godot/imported/corner.png-90a1166f6d438f2a5bead3c3704545f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/generator.png"
-dest_files=["res://.godot/imported/generator.png-e75b58cc764bb4155b2713aaf3a62529.ctex"]
+source_file="res://assets/pngs/base/corner.png"
+dest_files=["res://.godot/imported/corner.png-90a1166f6d438f2a5bead3c3704545f9.ctex"]
 
 [params]
 

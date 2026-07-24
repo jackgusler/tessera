@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8gbc5bpbxn4c"
-path="res://.godot/imported/corner.png-ced54bc102aa2967435b7a5dc7032ffc.ctex"
+uid="uid://bvglyaww7olc3"
+path="res://.godot/imported/upgrader.png-3b0c69f9bc61ea4c2c48e55733708da4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/conveyor/corner.png"
-dest_files=["res://.godot/imported/corner.png-ced54bc102aa2967435b7a5dc7032ffc.ctex"]
+source_file="res://assets/pngs/modifiers/upgrader.png"
+dest_files=["res://.godot/imported/upgrader.png-3b0c69f9bc61ea4c2c48e55733708da4.ctex"]
 
 [params]
 
