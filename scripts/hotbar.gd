@@ -4,8 +4,8 @@ extends HBoxContainer
 
 func _ready() -> void:
 	var group := ButtonGroup.new()
-	for i in board.tile_types.size():
-		var type := board.tile_types[i]
+	for i in board.database.types.size():
+		var type := board.database.types[i]
 		var btn := Button.new()
 		btn.text = type.display_name
 		btn.toggle_mode = true

@@ -1,23 +1,13 @@
 [gd_scene format=4 uid="uid://d2oxca3mm1nrh"]
 
 [ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
-[ext_resource type="Script" uid="uid://dayrljv6d8x52" path="res://scenes/hotbar.gd" id="2_85g3d"]
+[ext_resource type="Script" uid="uid://dayrljv6d8x52" path="res://scripts/hotbar.gd" id="2_85g3d"]
 [ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
 [ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/gridContainer.gd" id="2_tefeu"]
-[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="3_tipki"]
-[ext_resource type="Resource" uid="uid://bswko1c7yfoe" path="res://types/tiles/belt/straight.tres" id="4_85g3d"]
-[ext_resource type="Resource" uid="uid://fkh1spgsp3hh" path="res://types/tiles/belt/corner_left.tres" id="5_choun"]
-[ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://types/tiles/belt/corner_right.tres" id="6_ya4ey"]
-[ext_resource type="Resource" uid="uid://76eonk5qulcb" path="res://types/tiles/source/generator.tres" id="8_choun"]
-[ext_resource type="Resource" uid="uid://cluh3q7y36kdd" path="res://types/tiles/adder/adder.tres" id="9_dp3eg"]
-[ext_resource type="Resource" uid="uid://wkfdd6p767ul" path="res://types/tiles/sink/output.tres" id="10_0ld40"]
+[ext_resource type="Resource" uid="uid://b62jnwc6tbyo" path="res://types/tiles/tile_database.tres" id="4_tipki"]
 [ext_resource type="Texture2D" uid="uid://b8gbc5bpbxn4c" path="res://assets/conveyor/corner.png" id="10_eb6dy"]
-[ext_resource type="Resource" uid="uid://d0ptb0mke0fq3" path="res://types/tiles/splitter/splitter.tres" id="11_gqmmt"]
 [ext_resource type="Texture2D" uid="uid://c64bup3t8bci6" path="res://assets/conveyor/straight.png" id="11_trceg"]
 [ext_resource type="Texture2D" uid="uid://dy82rkrc8xps8" path="res://assets/conveyor/corner_opposite.png" id="12_a8y0u"]
-[ext_resource type="Resource" uid="uid://c1hgw7615kk5r" path="res://types/tiles/upgrader/upgrader.tres" id="12_yc10j"]
-[ext_resource type="Resource" uid="uid://bhi4vejlu2esf" path="res://types/tiles/downgrader/downgrader.tres" id="13_jscy8"]
-[ext_resource type="Resource" uid="uid://c0wtf88ava41d" path="res://types/tiles/multiplier/multiplier.tres" id="14_pm3ni"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_85g3d"]
 texture = ExtResource("2_tbgi4")
@@ -110,7 +100,7 @@ texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(4, 4)
 script = ExtResource("2_tefeu")
-tile_types = Array[ExtResource("3_tipki")]([ExtResource("4_85g3d"), ExtResource("5_choun"), ExtResource("6_ya4ey"), ExtResource("8_choun"), ExtResource("9_dp3eg"), ExtResource("10_0ld40"), ExtResource("11_gqmmt"), ExtResource("12_yc10j"), ExtResource("13_jscy8"), ExtResource("14_pm3ni")])
+database = ExtResource("4_tipki")
 
 [node name="ColorRect" type="ColorRect" parent="GridContainer" unique_id=839329519]
 custom_minimum_size = Vector2(480, 270)

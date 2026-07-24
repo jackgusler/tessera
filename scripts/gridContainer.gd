@@ -5,10 +5,10 @@ extends Node2D
 @onready var placeable: TileMapLayer = $Placeable
 @onready var preview: TileMapLayer = $Preview
 
+@export var database: TileDatabase
 @export var grid_width: int = 6
 @export var grid_height: int = 6
 @export var cell_size: int = 16
-@export var tile_types: Array[TileType]
 var current_type_index: int = 0
 var current_rotation: int = 0   # 0..3
 
@@ -114,7 +114,7 @@ func _rotation_to_alt(rot: int) -> int:
 		_: return 0
 		
 func current_type() -> TileType:
-	return tile_types[current_type_index]
+	return database.types[current_type_index]
 
 func _cell_under_mouse() -> Vector2i:
 	return map_to_board(placeable.local_to_map(placeable.get_local_mouse_position()))

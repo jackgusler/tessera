@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TileDatabase" format=3 uid="uid://b62jnwc6tbyo"]
 
-[ext_resource type="Script" uid="uid://boh722hjjs6o5" path="res://tile_database.gd" id="1_hpb73"]
+[ext_resource type="Script" uid="uid://boh722hjjs6o5" path="res://scripts/tile_database.gd" id="1_hpb73"]
 [ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="2_den46"]
 [ext_resource type="Resource" uid="uid://bswko1c7yfoe" path="res://types/tiles/belt/straight.tres" id="3_la7y0"]
 [ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://types/tiles/belt/corner_right.tres" id="4_e3p16"]
