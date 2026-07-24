@@ -18,6 +18,9 @@ func _validate_property(property: Dictionary) -> void:
 			property.hint_string = "Adder:3,Multiplier:4,Upgrader:5,Downgrader:6,Splitter:7"
 		else:
 			property.hint_string = "Source:0,Belt:1,Sink:2"
+	elif property.name in ["inputs", "outputs"]:
+		if placement == Placement.MODIFIER:
+			property.usage = PROPERTY_USAGE_NONE
 
 @export var category: Category = Category.BELT
 

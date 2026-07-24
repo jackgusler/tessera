@@ -5,7 +5,8 @@
 [resource]
 script = ExtResource("1_o7hsn")
 display_name = "Adder"
-category = 2
+placement = 1
+category = 3
 inputs = 2
 outputs = 8
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"
