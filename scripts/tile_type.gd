@@ -25,7 +25,7 @@ func _validate_property(property: Dictionary) -> void:
 @export var category: Category = Category.BELT
 
 @export_group("Art")
-@export var source_id: int
+@export var texture: Texture2D
 @export var atlas_coords: Vector2i = Vector2i(0, 0)
 
 @export_group("Connectors")
