@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TileType" format=3 uid="uid://wkfdd6p767ul"]
+
+[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_s757q"]
+
+[resource]
+script = ExtResource("1_s757q")
+display_name = "Output"
+category = 2
+inputs = 2
+metadata/_custom_type_script = "uid://c1lwj6joykwhp"

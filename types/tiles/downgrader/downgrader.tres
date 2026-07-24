@@ -6,5 +6,5 @@
 script = ExtResource("1_lgfb3")
 display_name = "Downgrader"
 placement = 1
-category = 5
+category = 6
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"

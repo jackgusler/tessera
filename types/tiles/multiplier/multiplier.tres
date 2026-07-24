@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TileType" format=3 uid="uid://c0wtf88ava41d"]
+
+[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_21oa1"]
+
+[resource]
+script = ExtResource("1_21oa1")
+display_name = "Multiplier"
+placement = 1
+category = 4
+amount = 2.0
+metadata/_custom_type_script = "uid://c1lwj6joykwhp"
