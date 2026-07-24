@@ -17,6 +17,7 @@ const GRID_ORIGIN := Vector2i(-3, -3)
 const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
 var grid: Array
+var modifiers: Array
 
 func _process(_delta: float) -> void:
 	_update_ghost()

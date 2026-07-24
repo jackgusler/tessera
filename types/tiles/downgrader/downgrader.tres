@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TileType" format=3 uid="uid://bhi4vejlu2esf"]
+
+[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_lgfb3"]
+
+[resource]
+script = ExtResource("1_lgfb3")
+display_name = "Downgrader"
+placement = 1
+category = 5
+metadata/_custom_type_script = "uid://c1lwj6joykwhp"

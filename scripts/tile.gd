@@ -3,7 +3,7 @@ extends RefCounted
 
 var type: TileType
 var rotation: int = 0
-var current_value: float = 0.0
+var held_item: Item = null
 
 func rotated_inputs() -> int:
 	return _rotate_mask(type.inputs, rotation)
