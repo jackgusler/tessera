@@ -1,61 +1,61 @@
 [
   {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\voxel_mesher.gd",
-    "timestamp": 1784912588500,
-    "focus": false,
-    "openLocation": 0
-  },
-  {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\smoke.gd",
-    "timestamp": 1784912731845,
-    "focus": false,
-    "openLocation": 0
-  },
-  {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\render_check.tscn",
-    "timestamp": 1784912767312,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\main.gd",
+    "timestamp": 1784914611172,
     "focus": false,
     "openLocation": 0
   },
   {
     "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\render_check.gd",
-    "timestamp": 1784912775403,
+    "timestamp": 1784914633604,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\voxel_mesher.gd",
-    "timestamp": 1784912831197,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\smoke.gd",
+    "timestamp": 1784914639670,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\preview_3d.gd",
-    "timestamp": 1784912848360,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\smoke.gd",
+    "timestamp": 1784914654482,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\voxel_mesher.gd",
-    "timestamp": 1784912888358,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\main.gd",
+    "timestamp": 1784914717384,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\.claude\\projects\\C--Users-Jack-Documents-Repos-tessera\\memory\\working-style.md",
-    "timestamp": 1784912927466,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\slice_canvas.gd",
+    "timestamp": 1784914764385,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\.claude\\projects\\C--Users-Jack-Documents-Repos-tessera\\memory\\threedsprite-editor.md",
-    "timestamp": 1784912938700,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\slice_canvas.gd",
+    "timestamp": 1784914771073,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\.claude\\projects\\C--Users-Jack-Documents-Repos-tessera\\memory\\MEMORY.md",
-    "timestamp": 1784912945822,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\slice_canvas.gd",
+    "timestamp": 1784914777733,
+    "focus": false,
+    "openLocation": 0
+  },
+  {
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\main.gd",
+    "timestamp": 1784914785182,
+    "focus": false,
+    "openLocation": 0
+  },
+  {
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\README.md",
+    "timestamp": 1784914824241,
     "focus": false,
     "openLocation": 0
   }
