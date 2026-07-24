@@ -1,12 +1,24 @@
+@tool
 class_name TileType
 extends Resource
 
 enum Placement { BASE, MODIFIER }
-enum Category { SOURCE, BELT, ADDER, MULTIPLIER, UPGRADER, DOWNGRADER, SPLITTER, SINK }
-
+enum Category { SOURCE = 0, BELT = 1, SINK = 2, ADDER = 3, MULTIPLIER = 4, UPGRADER = 5, DOWNGRADER = 6, SPLITTER = 7 }
 
 @export var display_name: String
-@export var placement: Placement = Placement.BASE
+@export var placement: Placement = Placement.BASE:
+	set(value):
+		placement = value
+		notify_property_list_changed()
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name == "category":
+		property.hint = PROPERTY_HINT_ENUM
+		if placement == Placement.MODIFIER:
+			property.hint_string = "Adder:3,Multiplier:4,Upgrader:5,Downgrader:6,Splitter:7"
+		else:
+			property.hint_string = "Source:0,Belt:1,Sink:2"
+
 @export var category: Category = Category.BELT
 
 @export_group("Art")
