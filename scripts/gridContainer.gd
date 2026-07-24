@@ -9,6 +9,9 @@ extends Node2D
 @export var grid_width: int = 6
 @export var grid_height: int = 6
 @export var cell_size: int = 16
+
+var _source_by_texture: Dictionary = {}
+
 var current_type_index: int = 0
 var current_rotation: int = 0   # 0..3
 
@@ -23,6 +26,7 @@ func _process(_delta: float) -> void:
 
 func _ready() -> void:
 	_build_grid()
+	_build_source_lookup()
 
 func _build_grid() -> void:
 	grid = []
@@ -31,6 +35,14 @@ func _build_grid() -> void:
 		for x in grid_width:
 			row.append(null)
 		grid.append(row)
+		
+func _build_source_lookup() -> void:
+	var ts := placeable.tile_set
+	for i in ts.get_source_count():
+		var id := ts.get_source_id(i)
+		var src := ts.get_source(id) as TileSetAtlasSource
+		if src and src.texture:
+			_source_by_texture[src.texture] = id
 		
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -71,7 +83,7 @@ func _update_ghost() -> void:
 	if not is_empty(cell):
 		return
 	var type := current_type()
-	preview.set_cell(board_to_map(cell), type.source_id, type.atlas_coords, _rotation_to_alt(current_rotation))
+	preview.set_cell(board_to_map(cell), _source_by_texture[type.texture], Vector2i.ZERO, _rotation_to_alt(current_rotation))
 
 func is_in_bounds(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.y >= 0 and cell.x < grid_width and cell.y < grid_height
@@ -87,7 +99,7 @@ func place_tile(cell: Vector2i, tile: Tile) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
 	assert(is_empty(cell), "place_tile on occupied cell: %s" % cell)
 	grid[cell.y][cell.x] = tile
-	placeable.set_cell(board_to_map(cell), tile.type.source_id, tile.type.atlas_coords, _rotation_to_alt(tile.rotation))
+	placeable.set_cell(board_to_map(cell), _source_by_texture[tile.type.texture], Vector2i.ZERO, _rotation_to_alt(tile.rotation))
 
 func remove_tile(cell: Vector2i) -> void:
 	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)

@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="TileType" format=3 uid="uid://cluh3q7y36kdd"]
 
 [ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_o7hsn"]
+[ext_resource type="Texture2D" uid="uid://c31l24l72hfc1" path="res://assets/adder.png" id="2_yc4ow"]
 
 [resource]
 script = ExtResource("1_o7hsn")
 display_name = "Adder"
 placement = 1
 category = 3
+texture = ExtResource("2_yc4ow")
 amount = 1.0
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"

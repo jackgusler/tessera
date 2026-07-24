@@ -1,10 +1,12 @@
 [gd_resource type="Resource" script_class="TileType" format=3 uid="uid://bhi4vejlu2esf"]
 
 [ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_lgfb3"]
+[ext_resource type="Texture2D" uid="uid://b1gqkjt1a2y2q" path="res://assets/downgrader.png" id="2_51dqj"]
 
 [resource]
 script = ExtResource("1_lgfb3")
 display_name = "Downgrader"
 placement = 1
 category = 6
+texture = ExtResource("2_51dqj")
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"
