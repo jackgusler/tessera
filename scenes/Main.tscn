@@ -5,9 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
 [ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/gridContainer.gd" id="2_tefeu"]
 [ext_resource type="Resource" uid="uid://b62jnwc6tbyo" path="res://types/tiles/tile_database.tres" id="4_tipki"]
-[ext_resource type="Texture2D" uid="uid://b8gbc5bpbxn4c" path="res://assets/base/corner.png" id="10_eb6dy"]
-[ext_resource type="Texture2D" uid="uid://c64bup3t8bci6" path="res://assets/base/straight.png" id="11_trceg"]
-[ext_resource type="Texture2D" uid="uid://dy82rkrc8xps8" path="res://assets/base/corner_opposite.png" id="12_a8y0u"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_85g3d"]
 texture = ExtResource("2_tbgi4")
@@ -16,8 +13,11 @@ texture = ExtResource("2_tbgi4")
 [sub_resource type="TileSet" id="TileSet_choun"]
 sources/0 = SubResource("TileSetAtlasSource_85g3d")
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tbgi4"]
+load_path = "res://.godot/imported/corner.png-d35443c049a2b9066e05db47bc449f8c.ctex"
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ya4ey"]
-texture = ExtResource("10_eb6dy")
+texture = SubResource("CompressedTexture2D_tbgi4")
 0:0/animation_speed = 10.0
 0:0/animation_frame_0/duration = 1.0
 0:0/animation_frame_1/duration = 1.0
@@ -36,9 +36,12 @@ texture = ExtResource("10_eb6dy")
 0:0/animation_frame_14/duration = 1.0
 0:0/animation_frame_15/duration = 1.0
 0:0/0 = 0
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tefeu"]
+load_path = "res://.godot/imported/straight.png-2d68f1b160d1913e2771b1ca82006bcf.ctex"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eb6dy"]
-texture = ExtResource("11_trceg")
+texture = SubResource("CompressedTexture2D_tefeu")
 0:0/animation_speed = 10.0
 0:0/animation_frame_0/duration = 1.0
 0:0/animation_frame_1/duration = 1.0
@@ -58,8 +61,11 @@ texture = ExtResource("11_trceg")
 0:0/animation_frame_15/duration = 1.0
 0:0/0 = 0
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_o6xl0"]
+load_path = "res://.godot/imported/corner_opposite.png-6895f30902ca03be065923fd91668ad7.ctex"
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_trceg"]
-texture = ExtResource("12_a8y0u")
+texture = SubResource("CompressedTexture2D_o6xl0")
 0:0/animation_speed = 10.0
 0:0/animation_frame_0/duration = 1.0
 0:0/animation_frame_1/duration = 1.0
