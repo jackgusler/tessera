@@ -1,61 +1,61 @@
 [
   {
     "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\editor_state.gd",
-    "timestamp": 1784915174436,
+    "timestamp": 1784915829227,
     "focus": false,
     "openLocation": 0
   },
   {
     "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\slice_canvas.gd",
-    "timestamp": 1784915191235,
+    "timestamp": 1784915835082,
     "focus": false,
     "openLocation": 0
   },
   {
     "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\slice_canvas.gd",
-    "timestamp": 1784915200972,
+    "timestamp": 1784915842044,
+    "focus": false,
+    "openLocation": 0
+  },
+  {
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\preview_3d.gd",
+    "timestamp": 1784915847136,
+    "focus": false,
+    "openLocation": 0
+  },
+  {
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\preview_3d.gd",
+    "timestamp": 1784915855722,
+    "focus": false,
+    "openLocation": 0
+  },
+  {
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\smoke.gd",
+    "timestamp": 1784915870139,
     "focus": false,
     "openLocation": 0
   },
   {
     "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\main.gd",
-    "timestamp": 1784915211637,
+    "timestamp": 1784915891781,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\main.gd",
-    "timestamp": 1784915217297,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\view_panel.gd",
+    "timestamp": 1784915935010,
     "focus": false,
     "openLocation": 0
   },
   {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\render_check.gd",
-    "timestamp": 1784915229005,
-    "focus": false,
-    "openLocation": 0
-  },
-  {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\main.gd",
-    "timestamp": 1784915284504,
-    "focus": false,
-    "openLocation": 0
-  },
-  {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\scripts\\slice_canvas.gd",
-    "timestamp": 1784915306416,
+    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\tests\\smoke.gd",
+    "timestamp": 1784915947225,
     "focus": false,
     "openLocation": 0
   },
   {
     "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\README.md",
-    "timestamp": 1784915332003,
-    "focus": false,
-    "openLocation": 0
-  },
-  {
-    "filePath": "C:\\Users\\Jack\\Documents\\Repos\\3Dsprite\\README.md",
-    "timestamp": 1784915338934,
+    "timestamp": 1784915979196,
     "focus": false,
     "openLocation": 0
   }
