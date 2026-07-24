@@ -6,4 +6,6 @@
 script = ExtResource("1_fhdhd")
 display_name = "Left Corner"
 source_id = 2
+inputs = 2
+outputs = 4
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"
