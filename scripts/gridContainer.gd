@@ -12,7 +12,6 @@ extends Node2D
 var current_type_index: int = 0
 var current_rotation: int = 0   # 0..3
 
-
 const GRID_ORIGIN := Vector2i(-3, -3)
 const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
