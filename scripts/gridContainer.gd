@@ -1,6 +1,10 @@
 class_name gridContainer
 extends Node2D
 
+signal inventory_changed
+signal solved(value: float)
+signal run_failed(reason: String)
+
 @onready var grid_layer: TileMapLayer = $Grid
 @onready var base_layer: TileMapLayer = $Base
 @onready var items_layer: TileMapLayer = $Items
@@ -11,6 +15,10 @@ extends Node2D
 @export var grid_width: int = 6
 @export var grid_height: int = 6
 @export var cell_size: int = 16
+
+@export var level: Level
+var _remaining: Dictionary = {}
+var _locked: Dictionary = {}
 
 var _source_by_texture: Dictionary = {}
 
@@ -41,6 +49,26 @@ func _empty_board() -> Array:
 		row.resize(grid_width)
 		board.append(row)
 	return board
+	
+func load_level(l: Level) -> void:
+	level = l
+	grid_width = l.grid_width
+	grid_height = l.grid_height
+	clear()
+	_locked.clear()
+	_remaining.clear()
+	for placed in l.fixed_tiles:
+		var t = Tile.new()
+		t.type = placed.type
+		t.rotation = placed.rotation
+		_board_for(placed.type.placement)[placed.cell.y][placed.cell.x] = t
+		var layer := layer_for(placed.type)
+		layer.set_cell(board_to_map(placed.cell), _source_id(layer, placed.type.texture), placed.type.atlas_coords, _rotation_to_alt(placed.rotation))
+		_locked[placed.cell] = true
+	for slot in l.inventory:
+		_remaining[slot.type] = slot.count
+	inventory_changed.emit()
+	
 
 func _board_for(placement: int) -> Array:
 	return modifiers if placement == TileType.Placement.MODIFIER else grid
@@ -78,6 +106,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func can_place(cell: Vector2i, type: TileType) -> bool:
 	if not is_in_bounds(cell):
+		return false
+	if _locked.has(cell):
+		return false
+	if _remaining.get(type, 0) <= 0:
 		return false
 	if not is_empty(cell, type.placement):
 		return false
@@ -121,6 +153,14 @@ func _cell_under_mouse() -> Vector2i:
 func is_in_bounds(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.y >= 0 and cell.x < grid_width and cell.y < grid_height
 
+func find_cell_by_category(category: int) -> Vector2i:
+	for y in grid_height:
+		for x in grid_width:
+			var t: Tile = grid[y][x]
+			if t and t.type.category == category:
+				return Vector2i(x, y)
+	return Vector2i(-1, -1)
+
 func get_tile(cell: Vector2i, placement: int = TileType.Placement.BASE) -> Tile:
 	assert(is_in_bounds(cell), "get_tile out of bounds: %s" % cell)
 	return _board_for(placement)[cell.y][cell.x]
@@ -147,7 +187,17 @@ func remove_tile(cell: Vector2i, placement: int = TileType.Placement.BASE) -> vo
 		# base tile carries the modifier and item stacked on it
 		remove_tile(cell, TileType.Placement.MODIFIER)
 		clear_item(cell)
-	
+
+func check_solution() -> void:
+	var res := Simulator.run(self)
+	if not res.success:
+		run_failed.emit(res.error)
+		return
+	if absf(res.value - level.target) < 0.001:
+		solved.emit(res.value)
+	else:
+		run_failed.emit("Output was %s, target is %s." % [res.value, level.target])
+
 func clear() -> void:
 	_build_grid()
 	base_layer.clear()
