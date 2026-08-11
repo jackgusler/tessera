@@ -35,7 +35,8 @@ func _process(_delta: float) -> void:
 	_update_ghost()
 
 func _ready() -> void:
-	_build_grid()
+	#_build_grid()
+	load_level(level)
 	_build_source_lookup()
 
 func _build_grid() -> void:
