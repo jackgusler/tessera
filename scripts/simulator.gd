@@ -34,7 +34,7 @@ static func run(board: gridContainer) -> Result:
 			return res
 		var dir_index := _single_dir(out_mask)
 		if dir_index < 0:
-			res.error = "Tile at %s has multiple outputs (splitters unsupported)." % cell
+			res.error = "Tile at %s has multiple outputs (mask %d)." % [cell, out_mask]
 			return res
 			
 		var next: Vector2i = cell + gridContainer.ORTHO[dir_index]
