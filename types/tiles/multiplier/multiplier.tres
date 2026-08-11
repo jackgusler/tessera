@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="TileType" format=3 uid="uid://c0wtf88ava41d"]
 
 [ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_21oa1"]
-[ext_resource type="Texture2D" uid="uid://chsnj0osj8au4" path="res://assets/tilesets/modifiers/multiplier.png" id="2_omh0t"]
+[ext_resource type="Texture2D" uid="uid://dr3f6khaj7m5y" path="res://assets/pngs/modifiers/multiplier.png" id="2_omh0t"]
 
 [resource]
 script = ExtResource("1_21oa1")
