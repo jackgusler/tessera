@@ -23,14 +23,14 @@ metadata/_custom_type_script = "uid://bomy2fjairq57"
 [sub_resource type="Resource" id="Resource_cfucu"]
 script = ExtResource("1_48nat")
 type = ExtResource("3_8bdtk")
-cell = Vector2i(3, 4)
+cell = Vector2i(4, 4)
 rotation = 1
 metadata/_custom_type_script = "uid://bomy2fjairq57"
 
 [sub_resource type="Resource" id="Resource_i7xkd"]
 script = ExtResource("2_oagrl")
 type = ExtResource("5_ex4f2")
-count = 2
+count = 3
 metadata/_custom_type_script = "uid://bh242m3g33kps"
 
 [sub_resource type="Resource" id="Resource_1xg8j"]

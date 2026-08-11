@@ -154,10 +154,15 @@ func _update_ghost() -> void:
 	var cell := _cell_under_mouse()
 	if not can_place(cell, slot.type):
 		return
+
+	var rot := current_rotation
+	if slot.type.placement == TileType.Placement.MODIFIER:
+		rot = get_tile(cell, TileType.Placement.BASE).rotation
+
 	var layer := layer_for(slot.type)
 	if preview.tile_set != layer.tile_set:
 		preview.tile_set = layer.tile_set
-		preview.set_cell(board_to_map(cell), _source_id(layer, slot.type.texture), slot.type.atlas_coords, _rotation_to_alt(_rotation_for(cell, slot.type)))
+	preview.set_cell(board_to_map(cell), _source_id(layer, slot.type.texture), slot.type.atlas_coords, _rotation_to_alt(rot))
 
 func _cell_under_mouse() -> Vector2i:
 	return map_to_board(base_layer.local_to_map(base_layer.get_local_mouse_position()))
