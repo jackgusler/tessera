@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://b62jnwc6tbyo" path="res://types/tiles/tile_database.tres" id="4_tipki"]
 [ext_resource type="Texture2D" uid="uid://bwtwjb0wwbone" path="res://assets/pngs/base/corner.png" id="6_choun"]
 [ext_resource type="TileSet" uid="uid://dul267pmcfeo" path="res://assets/tilesets/base.tres" id="6_trceg"]
-[ext_resource type="TileSet" uid="uid://cgc8pd58kgwh8" path="res://assets/tilesets/items/item_1.tres" id="7_a8y0u"]
+[ext_resource type="TileSet" uid="uid://cgc8pd58kgwh8" path="res://assets/tilesets/items/item_1/item_1.tres" id="7_a8y0u"]
 [ext_resource type="Texture2D" uid="uid://bkkxtyt4wpoyf" path="res://assets/pngs/base/corner_opposite.png" id="7_ya4ey"]
 [ext_resource type="Texture2D" uid="uid://djru301pjxqfk" path="res://assets/pngs/base/generator.png" id="8_eb6dy"]
 [ext_resource type="TileSet" uid="uid://bmkvpk5pxvlww" path="res://assets/tilesets/modifiers.tres" id="8_jkv2x"]

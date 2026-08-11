@@ -11,8 +11,9 @@
 [ext_resource type="Resource" uid="uid://wkfdd6p767ul" path="res://types/tiles/sink/output.tres" id="9_3e604"]
 [ext_resource type="Resource" uid="uid://76eonk5qulcb" path="res://types/tiles/source/generator.tres" id="10_sy056"]
 [ext_resource type="Resource" uid="uid://c1hgw7615kk5r" path="res://types/tiles/upgrader/upgrader.tres" id="11_4hb4i"]
+[ext_resource type="Resource" uid="uid://d0ptb0mke0fq3" path="res://types/tiles/splitter/splitter.tres" id="12_e3p16"]
 
 [resource]
 script = ExtResource("1_hpb73")
-types = Array[ExtResource("2_den46")]([ExtResource("3_la7y0"), ExtResource("4_e3p16"), ExtResource("5_glbi3"), ExtResource("6_rsm52"), ExtResource("7_o0p6v"), ExtResource("8_3pwlq"), ExtResource("9_3e604"), ExtResource("10_sy056"), ExtResource("11_4hb4i")])
+types = Array[ExtResource("2_den46")]([ExtResource("3_la7y0"), ExtResource("4_e3p16"), ExtResource("5_glbi3"), ExtResource("6_rsm52"), ExtResource("7_o0p6v"), ExtResource("8_3pwlq"), ExtResource("9_3e604"), ExtResource("10_sy056"), ExtResource("11_4hb4i"), ExtResource("12_e3p16")])
 metadata/_custom_type_script = "uid://boh722hjjs6o5"
