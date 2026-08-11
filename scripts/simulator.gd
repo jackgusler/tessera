@@ -89,8 +89,8 @@ static func _shift_tier(item: Item, delta: int) -> void:
 
 static func _apply(tile: Tile, item: Item) -> void:
 	match tile.type.category:
-		TileType.Category.ADDER:      item.value += tile.amount
-		TileType.Category.MULTIPLIER: item.value *= tile.amount
+		TileType.Category.ADDER:      item.value += tile.stat
+		TileType.Category.MULTIPLIER: item.value *= tile.stat
 		TileType.Category.UPGRADER:   _shift_tier(item, 1)
 		TileType.Category.DOWNGRADER: _shift_tier(item, -1)
 		TileType.Category.SPLITTER:   pass

@@ -3,4 +3,4 @@ extends Resource
 
 @export var type: TileType
 @export var count: int = 1
-@export var amount: float = 0.0
+@export var stat: float = 0.0

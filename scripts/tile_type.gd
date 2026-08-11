@@ -34,4 +34,3 @@ func _validate_property(property: Dictionary) -> void:
 
 @export_group("Behaviour")
 @export var emits: ItemType
-@export var amount: float = 0.0

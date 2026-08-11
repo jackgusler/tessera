@@ -63,7 +63,7 @@ func load_level(l: Level) -> void:
 		var t := Tile.new()
 		t.type = placed.type
 		t.rotation = placed.rotation
-		t.amount = placed.amount
+		t.stat = placed.stat
 		_put_tile(placed.cell, t)
 		_locked[placed.cell] = true
 	for slot in l.inventory:
@@ -133,7 +133,7 @@ func _handle_left_click() -> void:
 	var t := Tile.new()
 	t.type = slot.type
 	t.rotation = current_rotation
-	t.amount = slot.amount
+	t.stat = slot.stat
 	place_tile(cell, t)
 
 func _handle_right_click() -> void:
