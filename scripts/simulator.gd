@@ -28,9 +28,13 @@ static func run(board: gridContainer) -> Result:
 	
 	for _steps in MAX_STEPS:
 		var tile: Tile = board.get_tile(cell)
-		var dir_index := _single_dir(tile.rotated_outputs())
+		var out_mask := tile.rotated_outputs()
+		if out_mask == 0:
+			res.error = "Tile at %s has no output." % cell
+			return res
+		var dir_index := _single_dir(out_mask)
 		if dir_index < 0:
-			res.error = "Dead end at %s." % cell
+			res.error = "Tile at %s has multiple outputs (splitters unsupported)." % cell
 			return res
 			
 		var next: Vector2i = cell + gridContainer.ORTHO[dir_index]
