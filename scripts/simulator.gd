@@ -24,7 +24,6 @@ static func run(board: gridContainer) -> Result:
 		return res
 	
 	var item := Item.create(source.type.emits, 0)
-	item.value = source.type.amount
 	res.path.append(cell)
 	
 	for _steps in MAX_STEPS:
@@ -74,11 +73,20 @@ static func _single_dir(mask: int) -> int:
 	
 static func _opposite(bit: int) -> int:
 	return ((bit << 2) | (bit >> 2)) & 0b1111
-	
-static func _apply(type: TileType, item: Item) -> void:
-	match type.category:
-		TileType.Category.ADDER:      item.value += type.amount
-		TileType.Category.MULTIPLIER: item.value *= type.amount
-		TileType.Category.UPGRADER:   item.tier = mini(item.tier + 1, item.type.max_tier())
-		TileType.Category.DOWNGRADER: item.tier = maxi(item.tier - 1, 0)
+
+static func _shift_tier(item: Item, delta: int) -> void:
+	var next := clampi(item.tier + delta, 0, item.type.max_tier())
+	if next == item.tier:
+		return
+	var from: float = item.type.tier_values[item.tier]
+	if from != 0.0:
+		item.value *= item.type.tier_values[next] / from
+	item.tier = next
+
+static func _apply(tile: Tile, item: Item) -> void:
+	match tile.type.category:
+		TileType.Category.ADDER:      item.value += tile.amount
+		TileType.Category.MULTIPLIER: item.value *= tile.amount
+		TileType.Category.UPGRADER:   _shift_tier(item, 1)
+		TileType.Category.DOWNGRADER: _shift_tier(item, -1)
 		TileType.Category.SPLITTER:   pass

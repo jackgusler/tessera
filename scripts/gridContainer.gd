@@ -25,6 +25,8 @@ var _source_by_texture: Dictionary = {}
 var current_type_index: int = 0
 var current_rotation: int = 0   # 0..3
 
+var current_slot_index: int = 0
+
 const GRID_ORIGIN := Vector2i(-3, -3)
 const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
 
@@ -35,9 +37,8 @@ func _process(_delta: float) -> void:
 	_update_ghost()
 
 func _ready() -> void:
-	#_build_grid()
-	load_level(level)
 	_build_source_lookup()
+	_build_grid()
 
 func _build_grid() -> void:
 	grid = _empty_board()
@@ -59,12 +60,11 @@ func load_level(l: Level) -> void:
 	_locked.clear()
 	_remaining.clear()
 	for placed in l.fixed_tiles:
-		var t = Tile.new()
+		var t := Tile.new()
 		t.type = placed.type
 		t.rotation = placed.rotation
-		_board_for(placed.type.placement)[placed.cell.y][placed.cell.x] = t
-		var layer := layer_for(placed.type)
-		layer.set_cell(board_to_map(placed.cell), _source_id(layer, placed.type.texture), placed.type.atlas_coords, _rotation_to_alt(placed.rotation))
+		t.amount = placed.amount
+		_put_tile(placed.cell, t)
 		_locked[placed.cell] = true
 	for slot in l.inventory:
 		_remaining[slot.type] = slot.count
@@ -118,14 +118,22 @@ func can_place(cell: Vector2i, type: TileType) -> bool:
 		return not is_empty(cell, TileType.Placement.BASE)
 	return true
 
+func current_slot() -> InventorySlot:
+	if level == null or current_slot_index >= level.inventory.size():
+		return null
+	return level.inventory[current_slot_index]
+
 func _handle_left_click() -> void:
+	var slot := current_slot()
+	if slot == null:
+		return
 	var cell := _cell_under_mouse()
-	var type := current_type()
-	if not can_place(cell, type):
+	if not can_place(cell, slot.type):
 		return
 	var t := Tile.new()
-	t.type = type
+	t.type = slot.type
 	t.rotation = current_rotation
+	t.amount = slot.amount
 	place_tile(cell, t)
 
 func _handle_right_click() -> void:
@@ -171,23 +179,37 @@ func is_empty(cell: Vector2i, placement: int = TileType.Placement.BASE) -> bool:
 	
 func place_tile(cell: Vector2i, tile: Tile) -> void:
 	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
-	var placement := tile.type.placement
-	assert(is_empty(cell, placement), "place_tile on occupied cell: %s" % cell)
-	_board_for(placement)[cell.y][cell.x] = tile
+	assert(is_empty(cell, tile.type.placement), "place_tile on occupied cell: %s" % cell)
+	_put_tile(cell, tile)
+	if _remaining.has(tile.type):
+		_remaining[tile.type] -= 1
+		inventory_changed.emit()
+
+func _put_tile(cell: Vector2i, tile: Tile) -> void:
+	_board_for(tile.type.placement)[cell.y][cell.x] = tile
 	var layer := layer_for(tile.type)
-	layer.set_cell(board_to_map(cell), _source_id(layer, tile.type.texture), tile.type.atlas_coords, _rotation_to_alt(tile.rotation))
+	var sid := _source_id(layer, tile.type.texture)
+	assert(sid >= 0, "No tileset source for '%s' on layer %s" % [tile.type.display_name, layer.name])
+	layer.set_cell(board_to_map(cell), sid, tile.type.atlas_coords, _rotation_to_alt(tile.rotation))
 
 func remove_tile(cell: Vector2i, placement: int = TileType.Placement.BASE) -> void:
 	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
+	if _locked.has(cell):
+		return
 	var tile: Tile = get_tile(cell, placement)
 	if tile == null:
 		return
 	_board_for(placement)[cell.y][cell.x] = null
 	layer_for(tile.type).erase_cell(board_to_map(cell))
+	if _remaining.has(tile.type):
+		_remaining[tile.type] += 1
+		inventory_changed.emit()
 	if placement == TileType.Placement.BASE:
-		# base tile carries the modifier and item stacked on it
 		remove_tile(cell, TileType.Placement.MODIFIER)
 		clear_item(cell)
+
+func remaining(type: TileType) -> int:
+	return _remaining.get(type, 0)
 
 func check_solution() -> void:
 	var res := Simulator.run(self)

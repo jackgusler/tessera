@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://dayrljv6d8x52" path="res://scripts/hotbar.gd" id="2_85g3d"]
+[ext_resource type="Script" uid="uid://c4x2dxuld1fle" path="res://scripts/level.gd" id="2_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
 [ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/gridContainer.gd" id="2_tefeu"]
 [ext_resource type="Resource" uid="uid://b62jnwc6tbyo" path="res://types/tiles/tile_database.tres" id="4_tipki"]
@@ -132,6 +133,7 @@ sources/4 = SubResource("TileSetAtlasSource_0ld40")
 
 [node name="main" type="Node2D" unique_id=1158318171]
 script = ExtResource("1_o5qli")
+levels = Array[ExtResource("2_jkv2x")]([ExtResource("5_a8y0u")])
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=512045358]
 
