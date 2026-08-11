@@ -9,6 +9,6 @@ script = ExtResource("2_vrpu7")
 display_name = "Generator"
 category = 0
 texture = ExtResource("3_71tbh")
-outputs = 8
+outputs = 2
 emits = ExtResource("1_udolc")
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"

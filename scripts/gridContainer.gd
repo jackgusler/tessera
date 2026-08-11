@@ -147,14 +147,16 @@ func _handle_right_click() -> void:
 	
 func _update_ghost() -> void:
 	preview.clear()
-	var cell := _cell_under_mouse()
-	var type := current_type()
-	if not can_place(cell, type):
+	var slot := current_slot()
+	if slot == null:
 		return
-	var layer := layer_for(type)
+	var cell := _cell_under_mouse()
+	if not can_place(cell, slot.type):
+		return
+	var layer := layer_for(slot.type)
 	if preview.tile_set != layer.tile_set:
 		preview.tile_set = layer.tile_set
-	preview.set_cell(board_to_map(cell), _source_id(layer, type.texture), type.atlas_coords, _rotation_to_alt(current_rotation))
+	preview.set_cell(board_to_map(cell), _source_id(layer, slot.type.texture), slot.type.atlas_coords, _rotation_to_alt(current_rotation))
 
 func _cell_under_mouse() -> Vector2i:
 	return map_to_board(base_layer.local_to_map(base_layer.get_local_mouse_position()))
