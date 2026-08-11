@@ -16,4 +16,7 @@
 [resource]
 script = ExtResource("1_hpb73")
 types = Array[ExtResource("2_den46")]([ExtResource("3_la7y0"), ExtResource("4_e3p16"), ExtResource("5_glbi3"), ExtResource("6_rsm52"), ExtResource("7_o0p6v"), ExtResource("8_3pwlq"), ExtResource("9_3e604"), ExtResource("10_sy056"), ExtResource("11_4hb4i"), ExtResource("12_e3p16")])
+belt_straight = ExtResource("3_la7y0")
+belt_corner_right = ExtResource("4_e3p16")
+belt_corner_left = ExtResource("5_glbi3")
 metadata/_custom_type_script = "uid://boh722hjjs6o5"

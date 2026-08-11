@@ -115,7 +115,8 @@ func can_place(cell: Vector2i, type: TileType) -> bool:
 	if not is_empty(cell, type.placement):
 		return false
 	if type.placement == TileType.Placement.MODIFIER:
-		return not is_empty(cell, TileType.Placement.BASE)
+		var host := get_tile(cell, TileType.Placement.BASE)
+		return host != null and host.type.accepts_modifiers
 	return true
 
 func current_slot() -> InventorySlot:
@@ -132,7 +133,7 @@ func _handle_left_click() -> void:
 		return
 	var t := Tile.new()
 	t.type = slot.type
-	t.rotation = current_rotation
+	t.rotation = _rotation_for(cell, slot.type)
 	t.stat = slot.stat
 	place_tile(cell, t)
 
@@ -156,7 +157,7 @@ func _update_ghost() -> void:
 	var layer := layer_for(slot.type)
 	if preview.tile_set != layer.tile_set:
 		preview.tile_set = layer.tile_set
-	preview.set_cell(board_to_map(cell), _source_id(layer, slot.type.texture), slot.type.atlas_coords, _rotation_to_alt(current_rotation))
+		preview.set_cell(board_to_map(cell), _source_id(layer, slot.type.texture), slot.type.atlas_coords, _rotation_to_alt(_rotation_for(cell, slot.type)))
 
 func _cell_under_mouse() -> Vector2i:
 	return map_to_board(base_layer.local_to_map(base_layer.get_local_mouse_position()))
@@ -214,6 +215,10 @@ func remaining(type: TileType) -> int:
 	return _remaining.get(type, 0)
 
 func check_solution() -> void:
+	for slot in level.inventory:
+		if slot.type.placement == TileType.Placement.MODIFIER and remaining(slot.type) > 0:
+			run_failed.emit("Every modifier has to be used.")
+			return
 	var res := Simulator.run(self)
 	if not res.success:
 		run_failed.emit(res.error)
@@ -259,6 +264,25 @@ func get_neighbors(cell: Vector2i) -> Array[Vector2i]:
 		if is_in_bounds(n):
 			out.append(n)
 	return out
+	
+func _dir_index(from: Vector2i, to: Vector2i) -> int:
+	return ORTHO.find(to - from)
+	
+func _piece_for(a: int, b: int) -> Dictionary:
+	if b == a:
+		return { "type": database.belt_straight,     "rotation": (b + 1) % 4 }
+	if b == (a + 1) % 4:
+		return { "type": database.belt_corner_right, "rotation": b }
+	if b == (a + 3) % 4:
+		return { "type": database.belt_corner_left,  "rotation": (b + 2) % 4 }
+	return {} 
+	
+func _rotation_for(cell: Vector2i, type: TileType) -> int:
+	if type.placement == TileType.Placement.MODIFIER:
+		var host := get_tile(cell, TileType.Placement.BASE)
+		if host:
+			return host.rotation
+	return current_rotation
 	
 func _rotation_to_alt(rot: int) -> int:
 	match rot:

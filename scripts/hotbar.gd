@@ -14,7 +14,7 @@ func _rebuild() -> void:
 		var slot: InventorySlot = board.level.inventory[i]
 		var left := board.remaining(slot.type)
 		var btn := Button.new()
-		btn.text = "%s ×%d" % [slot.type.display_name, left]
+		btn.text = _slot_label(slot, left)
 		btn.toggle_mode = true
 		btn.button_group = group
 		btn.disabled = left <= 0
@@ -24,3 +24,12 @@ func _rebuild() -> void:
 
 func _on_slot_pressed(index: int) -> void:
 	board.current_slot_index = index
+
+func _slot_label(slot: InventorySlot, left: int) -> String:
+	var s := ""
+	match slot.type.category:
+		TileType.Category.ADDER:      s = " +%s" % slot.stat
+		TileType.Category.MULTIPLIER: s = " ×%s" % slot.stat
+		TileType.Category.UPGRADER:   s = " ▲"
+		TileType.Category.DOWNGRADER: s = " ▼"
+	return "%s%s (%d)" % [slot.type.display_name, s, left]

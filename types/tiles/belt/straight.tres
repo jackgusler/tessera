@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("1_ygbei")
 display_name = "Straight"
+accepts_modifiers = true
 texture = ExtResource("2_f6quw")
 inputs = 2
 outputs = 8

@@ -23,6 +23,7 @@ func _validate_property(property: Dictionary) -> void:
 			property.usage = PROPERTY_USAGE_NONE
 
 @export var category: Category = Category.BELT
+@export var accepts_modifiers: bool = false
 
 @export_group("Art")
 @export var texture: Texture2D
