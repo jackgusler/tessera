@@ -67,13 +67,13 @@ static func run(board: gridContainer) -> Result:
 	return res
 
 static func _single_dir(mask: int) -> int:
-	var found := -1
-	for i in 4:
-		if mask & (1 << i):
-			if found >= 0:
-				return -1
-			found = -1
-	return found
+	match mask:
+		1: return 0   # Right
+		2: return 1   # Down
+		4: return 2   # Left
+		8: return 3   # Up
+		_: return -1  # zero or multi-bit
+	return -1
 	
 static func _opposite(bit: int) -> int:
 	return ((bit << 2) | (bit >> 2)) & 0b1111
