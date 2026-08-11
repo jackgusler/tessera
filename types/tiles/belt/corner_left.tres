@@ -7,6 +7,6 @@
 script = ExtResource("1_fhdhd")
 display_name = "Left Corner"
 texture = ExtResource("2_1xyqb")
-inputs = 2
-outputs = 4
+inputs = 1
+outputs = 2
 metadata/_custom_type_script = "uid://c1lwj6joykwhp"

@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="Level" format=3 uid="uid://4rp88cb0vbfi"]
+
+[ext_resource type="Script" uid="uid://bomy2fjairq57" path="res://scripts/placed_tile.gd" id="1_48nat"]
+[ext_resource type="Script" uid="uid://bh242m3g33kps" path="res://scripts/inventory_slot.gd" id="2_oagrl"]
+[ext_resource type="Resource" uid="uid://76eonk5qulcb" path="res://types/tiles/source/generator.tres" id="2_tqtu8"]
+[ext_resource type="Resource" uid="uid://wkfdd6p767ul" path="res://types/tiles/sink/output.tres" id="3_8bdtk"]
+[ext_resource type="Script" uid="uid://c4x2dxuld1fle" path="res://scripts/level.gd" id="3_p27re"]
+[ext_resource type="Resource" uid="uid://bswko1c7yfoe" path="res://types/tiles/belt/straight.tres" id="5_ex4f2"]
+[ext_resource type="Resource" uid="uid://fkh1spgsp3hh" path="res://types/tiles/belt/corner_left.tres" id="6_3maif"]
+[ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://types/tiles/belt/corner_right.tres" id="7_v08sr"]
+[ext_resource type="Resource" uid="uid://cluh3q7y36kdd" path="res://types/tiles/adder/adder.tres" id="8_ws5oe"]
+[ext_resource type="Resource" uid="uid://c1hgw7615kk5r" path="res://types/tiles/upgrader/upgrader.tres" id="9_6382i"]
+[ext_resource type="Resource" uid="uid://bhi4vejlu2esf" path="res://types/tiles/downgrader/downgrader.tres" id="10_xfjkr"]
+
+[sub_resource type="Resource" id="Resource_u7r0v"]
+script = ExtResource("1_48nat")
+type = ExtResource("2_tqtu8")
+cell = Vector2i(0, 2)
+rotation = 3
+stat = 1.0
+metadata/_custom_type_script = "uid://bomy2fjairq57"
+
+[sub_resource type="Resource" id="Resource_cfucu"]
+script = ExtResource("1_48nat")
+type = ExtResource("3_8bdtk")
+cell = Vector2i(3, 4)
+rotation = 1
+metadata/_custom_type_script = "uid://bomy2fjairq57"
+
+[sub_resource type="Resource" id="Resource_i7xkd"]
+script = ExtResource("2_oagrl")
+type = ExtResource("5_ex4f2")
+count = 2
+metadata/_custom_type_script = "uid://bh242m3g33kps"
+
+[sub_resource type="Resource" id="Resource_1xg8j"]
+script = ExtResource("2_oagrl")
+type = ExtResource("6_3maif")
+metadata/_custom_type_script = "uid://bh242m3g33kps"
+
+[sub_resource type="Resource" id="Resource_fe28p"]
+script = ExtResource("2_oagrl")
+type = ExtResource("7_v08sr")
+metadata/_custom_type_script = "uid://bh242m3g33kps"
+
+[sub_resource type="Resource" id="Resource_ofnt4"]
+script = ExtResource("2_oagrl")
+type = ExtResource("8_ws5oe")
+stat = 6.0
+metadata/_custom_type_script = "uid://bh242m3g33kps"
+
+[sub_resource type="Resource" id="Resource_5s33u"]
+script = ExtResource("2_oagrl")
+type = ExtResource("9_6382i")
+metadata/_custom_type_script = "uid://bh242m3g33kps"
+
+[sub_resource type="Resource" id="Resource_u1x4y"]
+script = ExtResource("2_oagrl")
+type = ExtResource("10_xfjkr")
+metadata/_custom_type_script = "uid://bh242m3g33kps"
+
+[resource]
+script = ExtResource("3_p27re")
+display_name = "Round Trip"
+target = 4.0
+fixed_tiles = Array[ExtResource("1_48nat")]([SubResource("Resource_u7r0v"), SubResource("Resource_cfucu")])
+inventory = Array[ExtResource("2_oagrl")]([SubResource("Resource_i7xkd"), SubResource("Resource_1xg8j"), SubResource("Resource_fe28p"), SubResource("Resource_ofnt4"), SubResource("Resource_5s33u"), SubResource("Resource_u1x4y")])
+metadata/_custom_type_script = "uid://c4x2dxuld1fle"
