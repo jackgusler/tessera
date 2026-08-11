@@ -51,7 +51,7 @@ static func run(board: gridContainer) -> Result:
 		
 		var modifier: Tile = board.get_tile(cell, TileType.Placement.MODIFIER)
 		if modifier:
-			_apply(modifier.type, item)
+			_apply(modifier, item)
 			
 		if next_tile.type.category == TileType.Category.SINK:
 			res.success = true
