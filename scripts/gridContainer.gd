@@ -2,7 +2,9 @@ class_name gridContainer
 extends Node2D
 
 @onready var grid_layer: TileMapLayer = $Grid
-@onready var placeable: TileMapLayer = $Placeable
+@onready var placeable: TileMapLayer = $Base
+@onready var Items: TileMapLayer = $Items
+@onready var Modifiers: TileMapLayer = $Modifiers
 @onready var preview: TileMapLayer = $Preview
 
 @export var database: TileDatabase
