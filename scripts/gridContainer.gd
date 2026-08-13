@@ -84,7 +84,7 @@ func load_level(l: Level) -> void:
 	for slot in l.inventory:
 		_remaining[slot.type] = slot.count
 	inventory_changed.emit()
-	_path.clear()
+	_flow.clear()
 	_source_cell = find_cell_by_category(TileType.Category.SOURCE)
 	_sink_cell = find_cell_by_category(TileType.Category.SINK)
 	_source_dir = dir_index(get_tile(_source_cell).rotated_outputs())
@@ -307,9 +307,6 @@ static func dir_index(mask: int) -> int:
 		_: return -1 # zero or multi-bit
 	return -1
 
-func path_head() -> Vector2i:
-	return _path[-1] if not _path.is_empty() else _source_cell
-
 func conveyors_left() -> int:
 	return level.conveyors - _flow.size()
 
@@ -374,26 +371,6 @@ func _incoming_dir(cell: Vector2i) -> int:
 		if n + ORTHO[_flow[n]] == cell:
 			return _flow[n]
 	return -1
-
-func _try_append(cell: Vector2i) -> void:
-	if level == null or _path.size() >= level.conveyors:
-		return
-	if _path.size() >= level.conveyors:
-		return
-	if cell == _source_cell or cell == _sink_cell or _path.has(cell):
-		return
-	if not _is_adjacent(path_head(), cell):
-		return
-	if _path.is_empty() and cell != _source_cell + ORTHO[_source_dir]:
-		return
-	_path.append(cell)
-	_rebuild_path()
-
-func _truncate_to(size: int) -> void:
-	if size >= _path.size():
-		return
-	_path.resize(size)
-	_rebuild_path()
 
 func _rebuild_path() -> void:
 	for y in grid_height:
