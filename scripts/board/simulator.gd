@@ -32,7 +32,7 @@ static func run(board: Board) -> Result:
 		if out_mask == 0:
 			res.error = "Tile at %s has no output." % cell
 			return res
-		var dir_index := Board.dir_index(out_mask))
+		var dir_index := Board.dir_index(out_mask)
 		if dir_index < 0:
 			res.error = "Tile at %s has multiple outputs (mask %d)." % [cell, out_mask]
 			return res
