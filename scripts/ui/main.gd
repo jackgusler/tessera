@@ -7,8 +7,8 @@ extends Node2D
 var current_level_index: int = -1
 
 func _ready() -> void:
-	board.solved.connect(_on_solved)
-	board.run_failed.connect(_on_run_failed)
+	board.session.solved.connect(_on_solved)
+	board.session.run_failed.connect(_on_run_failed)
 	load_level(0)
 
 func load_level(index: int) -> void:
@@ -22,7 +22,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):
 		return
 	match event.keycode:
-		KEY_ENTER:        board.check_solution()
+		KEY_ENTER:        board.session.check_solution()
 		KEY_BRACKETRIGHT: load_level(current_level_index + 1)
 		KEY_BRACKETLEFT:  load_level(current_level_index - 1)
 

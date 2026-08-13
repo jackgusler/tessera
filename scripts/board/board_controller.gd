@@ -1,122 +1,44 @@
 class_name BoardController
 extends Node2D
 
-signal inventory_changed
-signal solved(value: float)
-signal run_failed(reason: String)
-
-@onready var grid_layer: TileMapLayer = $Grid
-@onready var base_layer: TileMapLayer = $Base
-@onready var items_layer: TileMapLayer = $Items
-@onready var modifiers_layer: TileMapLayer = $Modifiers
-@onready var preview: TileMapLayer = $Preview
+signal path_changed
 
 @export var belt_straight: TileType
 @export var belt_corner_left: TileType
 @export var belt_corner_right: TileType
 
-@export var database: TileDatabase
-@export var grid_width: int = 6
-@export var grid_height: int = 6
 @export var cell_size: int = 16
 
-@export var level: Level
-var _remaining: Dictionary = {}
-var _locked: Dictionary = {}
+var board: Board
+var session: LevelSession
+var router: BeltRouter
+var view: BoardView
 
-signal path_changed
-
-var _flow: Dictionary = {} # Vector2i -> outgoing direction index
-var _stroke: Array[Vector2i] = [] # cells painted in the current drag
-var _source_cell := Vector2i(-1, -1)
-var _sink_cell := Vector2i(-1, -1)
-var _source_dir: int = -1 # direction index leaving the generator
-var _sink_dir: int = -1 # direction index travelling INTO the sink
-var _dragging: bool = false
-var _erasing: bool = false
 var belt_mode: bool = true
-
-var _source_by_texture: Dictionary = {}
-
-var current_type_index: int = 0
+var current_slot_index: int = 0
 var current_rotation: int = 0 # 0..3
 
-var current_slot_index: int = 0
+var _dragging: bool = false
+var _erasing: bool = false
 
-const GRID_ORIGIN := Vector2i(-3, -3)
-const ORTHO: Array[Vector2i] = [Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT, Vector2i.UP]
+func _init() -> void:
+	board = Board.new()
+	session = LevelSession.new(board)
 
-var grid: Array
-var modifiers: Array
+func _ready() -> void:
+	view = BoardView.new($Base, $Items, $Modifiers, $Preview)
+	router = BeltRouter.new(board, belt_straight, belt_corner_left, belt_corner_right)
 
 func _process(_delta: float) -> void:
 	_update_ghost()
 
-func _ready() -> void:
-	_build_source_lookup()
-	_build_grid()
-
-func _build_grid() -> void:
-	grid = _empty_board()
-	modifiers = _empty_board()
-	
-func _empty_board() -> Array:
-	var board := []
-	for y in grid_height:
-		var row := []
-		row.resize(grid_width)
-		board.append(row)
-	return board
-	
 func load_level(l: Level) -> void:
-	level = l
-	grid_width = l.grid_width
-	grid_height = l.grid_height
-	clear()
-	_locked.clear()
-	_remaining.clear()
-	for placed in l.fixed_tiles:
-		var t := Tile.new()
-		t.type = placed.type
-		t.rotation = placed.rotation
-		t.stat = placed.stat
-		_put_tile(placed.cell, t)
-		_locked[placed.cell] = true
-	for slot in l.inventory:
-		_remaining[slot.type] = slot.count
-	inventory_changed.emit()
-	_flow.clear()
-	_source_cell = find_cell_by_category(TileType.Category.SOURCE)
-	_sink_cell = find_cell_by_category(TileType.Category.SINK)
-	_source_dir = dir_index(get_tile(_source_cell).rotated_outputs())
-	_sink_dir = (dir_index(get_tile(_sink_cell).rotated_inputs()) + 2) % 4
-	
+	session.load_level(l)
+	router.configure(l.conveyors)
+	view.render(board)
+	path_changed.emit()
 
-func _board_for(placement: int) -> Array:
-	return modifiers if placement == TileType.Placement.MODIFIER else grid
-
-func _build_source_lookup() -> void:
-	_source_by_texture.clear()
-	for layer in [base_layer, items_layer, modifiers_layer]:
-		_source_by_texture[layer.tile_set] = _sources_for(layer.tile_set)
-
-func _sources_for(ts: TileSet) -> Dictionary:
-	var out := {}
-	for i in ts.get_source_count():
-		var id := ts.get_source_id(i)
-		var src := ts.get_source(id) as TileSetAtlasSource
-		if src and src.texture:
-			out[src.texture] = id
-	return out
-
-func _source_id(layer: TileMapLayer, texture: Texture2D) -> int:
-	var lookup: Dictionary = _source_by_texture.get(layer.tile_set, {})
-	return lookup.get(texture, -1)
-
-func layer_for(type: TileType) -> TileMapLayer:
-	match type.placement:
-		TileType.Placement.MODIFIER: return modifiers_layer
-		_: return base_layer
+# --- INPUT ---
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -124,11 +46,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			MOUSE_BUTTON_LEFT:
 				if event.pressed:
 					if belt_mode:
-						_begin_drag(_cell_under_mouse())
+						_dragging = true
+						if router.begin_drag(view.cell_under_mouse()):
+							_apply_route()
 					else:
 						_handle_left_click()
 				else:
-					_end_drag()
+					_dragging = false
+					if router.end_drag():
+						_apply_route()
 			MOUSE_BUTTON_RIGHT:
 				_erasing = event.pressed
 				if event.pressed:
@@ -137,345 +63,76 @@ func _unhandled_input(event: InputEvent) -> void:
 		if _erasing:
 			_handle_right_click()
 		elif _dragging and belt_mode:
-			_extend_drag(_cell_under_mouse())
-
-func can_place(cell: Vector2i, type: TileType) -> bool:
-	if not is_in_bounds(cell):
-		return false
-	if _locked.has(cell):
-		return false
-	if _remaining.get(type, 0) <= 0:
-		return false
-	if not is_empty(cell, type.placement):
-		return false
-	if type.placement == TileType.Placement.MODIFIER:
-		var host := get_tile(cell, TileType.Placement.BASE)
-		return host != null and host.type.accepts_modifiers
-	return true
-
-func current_slot() -> InventorySlot:
-	if level == null or current_slot_index >= level.inventory.size():
-		return null
-	return level.inventory[current_slot_index]
+			if router.extend_drag(view.cell_under_mouse()):
+				_apply_route()
 
 func _handle_left_click() -> void:
 	var slot := current_slot()
 	if slot == null:
 		return
-	var cell := _cell_under_mouse()
-	if not can_place(cell, slot.type):
+	var cell := view.cell_under_mouse()
+	if not session.can_place(cell, slot.type):
 		return
 	var t := Tile.new()
 	t.type = slot.type
 	t.rotation = _rotation_for(cell, slot.type)
 	t.stat = slot.stat
-	place_tile(cell, t)
+	board.set_tile(cell, t)
+	session.consume(slot.type)
+	view.render(board)
 
 func _handle_right_click() -> void:
-	var cell := _cell_under_mouse()
-	if not is_in_bounds(cell):
+	var cell := view.cell_under_mouse()
+	if not board.is_in_bounds(cell):
 		return
-	if not is_empty(cell, TileType.Placement.MODIFIER):
-		remove_tile(cell, TileType.Placement.MODIFIER)
+	if not board.is_empty(cell, TileType.Placement.MODIFIER):
+		_remove_tile(cell, TileType.Placement.MODIFIER)
 		return
-	if _flow.erase(cell):
-		_rebuild_path()
-	
+	if router.erase(cell):
+		_apply_route()
+
+# --- MUTATE, THEN RE-RENDER ---
+
+func _apply_route() -> void:
+	router.apply_to_board()
+	session.refund_all(board.prune_modifiers())
+	view.render(board)
+	path_changed.emit()
+	session.inventory_changed.emit()
+
+func _remove_tile(cell: Vector2i, placement: int = TileType.Placement.BASE) -> void:
+	if board.is_locked(cell):
+		return
+	var tile := board.clear_tile(cell, placement)
+	if tile == null:
+		return
+	session.refund(tile.type)
+	if placement == TileType.Placement.BASE:
+		var m := board.clear_tile(cell, TileType.Placement.MODIFIER)
+		if m:
+			session.refund(m.type)
+		board.clear_item(cell)
+	view.render(board)
+
 func _update_ghost() -> void:
-	preview.clear()
 	var slot := current_slot()
 	if slot == null:
+		view.hide_ghost()
 		return
-	var cell := _cell_under_mouse()
-	if not can_place(cell, slot.type):
+	var cell := view.cell_under_mouse()
+	if not session.can_place(cell, slot.type):
+		view.hide_ghost()
 		return
+	view.show_ghost(cell, slot.type, _rotation_for(cell, slot.type))
 
-	var rot := current_rotation
-	if slot.type.placement == TileType.Placement.MODIFIER:
-		rot = get_tile(cell, TileType.Placement.BASE).rotation
-
-	var layer := layer_for(slot.type)
-	if preview.tile_set != layer.tile_set:
-		preview.tile_set = layer.tile_set
-	preview.set_cell(board_to_map(cell), _source_id(layer, slot.type.texture), slot.type.atlas_coords, _rotation_to_alt(rot))
-
-func _cell_under_mouse() -> Vector2i:
-	return map_to_board(base_layer.local_to_map(base_layer.get_local_mouse_position()))
-
-func is_in_bounds(cell: Vector2i) -> bool:
-	return cell.x >= 0 and cell.y >= 0 and cell.x < grid_width and cell.y < grid_height
-
-func find_cell_by_category(category: int) -> Vector2i:
-	for y in grid_height:
-		for x in grid_width:
-			var t: Tile = grid[y][x]
-			if t and t.type.category == category:
-				return Vector2i(x, y)
-	return Vector2i(-1, -1)
-
-func get_tile(cell: Vector2i, placement: int = TileType.Placement.BASE) -> Tile:
-	assert(is_in_bounds(cell), "get_tile out of bounds: %s" % cell)
-	return _board_for(placement)[cell.y][cell.x]
-
-func is_empty(cell: Vector2i, placement: int = TileType.Placement.BASE) -> bool:
-	return get_tile(cell, placement) == null
-	
-func place_tile(cell: Vector2i, tile: Tile) -> void:
-	assert(is_in_bounds(cell), "place_tile out of bounds: %s" % cell)
-	assert(is_empty(cell, tile.type.placement), "place_tile on occupied cell: %s" % cell)
-	_put_tile(cell, tile)
-	if _remaining.has(tile.type):
-		_remaining[tile.type] -= 1
-		inventory_changed.emit()
-
-func _put_tile(cell: Vector2i, tile: Tile) -> void:
-	_board_for(tile.type.placement)[cell.y][cell.x] = tile
-	var layer := layer_for(tile.type)
-	var sid := _source_id(layer, tile.type.texture)
-	assert(sid >= 0, "No tileset source for '%s' on layer %s" % [tile.type.display_name, layer.name])
-	layer.set_cell(board_to_map(cell), sid, tile.type.atlas_coords, _rotation_to_alt(tile.rotation))
-
-func remove_tile(cell: Vector2i, placement: int = TileType.Placement.BASE) -> void:
-	assert(is_in_bounds(cell), "remove_tile out of bounds: %s" % cell)
-	if _locked.has(cell):
-		return
-	var tile: Tile = get_tile(cell, placement)
-	if tile == null:
-		return
-	_board_for(placement)[cell.y][cell.x] = null
-	layer_for(tile.type).erase_cell(board_to_map(cell))
-	if _remaining.has(tile.type):
-		_remaining[tile.type] += 1
-		inventory_changed.emit()
-	if placement == TileType.Placement.BASE:
-		remove_tile(cell, TileType.Placement.MODIFIER)
-		clear_item(cell)
-
-func remaining(type: TileType) -> int:
-	return _remaining.get(type, 0)
-
-func check_solution() -> void:
-	for slot in level.inventory:
-		if slot.type.placement == TileType.Placement.MODIFIER and remaining(slot.type) > 0:
-			run_failed.emit("Every modifier has to be used.")
-			return
-	var res := Simulator.run(self)
-	if not res.success:
-		run_failed.emit(res.error)
-		return
-	if absf(res.value - level.target) < 0.001:
-		solved.emit(res.value)
-	else:
-		run_failed.emit("Output was %s, target is %s." % [res.value, level.target])
-
-func clear() -> void:
-	_build_grid()
-	base_layer.clear()
-	items_layer.clear()
-	modifiers_layer.clear()
-	preview.clear()
-	
-func set_item(cell: Vector2i, item: Item) -> void:
-	var tile := get_tile(cell)
-	if tile == null:
-		return
-	tile.held_item = item
-	refresh_item(cell)
-	
-func clear_item(cell: Vector2i) -> void:
-	var tile := get_tile(cell)
-	if tile:
-		tile.held_item = null
-	items_layer.erase_cell(board_to_map(cell))
-	
-func refresh_item(cell: Vector2i) -> void:
-	var map_cell := board_to_map(cell)
-	var tile := get_tile(cell)
-	if tile == null or tile.held_item == null:
-		items_layer.erase_cell(map_cell)
-		return
-	var tex: Texture2D = tile.held_item.type.tier_textures[tile.held_item.tier]
-	items_layer.set_cell(map_cell, _source_id(items_layer, tex), Vector2i.ZERO, 0)
-	
-func get_neighbors(cell: Vector2i) -> Array[Vector2i]:
-	var out: Array[Vector2i] = []
-	for d in ORTHO:
-		var n: Vector2i = cell + d
-		if is_in_bounds(n):
-			out.append(n)
-	return out
-	
-static func dir_index(mask: int) -> int:
-	match mask:
-		1: return 0 # Right
-		2: return 1 # Down
-		4: return 2 # Left
-		8: return 3 # Up
-		_: return -1 # zero or multi-bit
-
-func conveyors_left() -> int:
-	return level.conveyors - _flow.size()
-
-func _dir_between(from: Vector2i, to: Vector2i) -> int:
-	return ORTHO.find(to - from)
-
-func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
-	var d: Vector2i = b - a
-	return absi(d.x) + absi(d.y) == 1
-
-func _piece_for(a: int, b: int) -> Dictionary:
-	var type: TileType
-	if b == a:
-		type = belt_straight
-	elif b == (a + 1) % 4:
-		type = belt_corner_right
-	elif b == (a + 3) % 4:
-		type = belt_corner_left
-	else:
-		return {}
-	return {"type": type, "rotation": (b - dir_index(type.outputs) + 4) % 4}
-
-func _begin_drag(cell: Vector2i) -> void:
-	_dragging = true
-	_stroke.clear()
-	_paint(cell)
-
-func _extend_drag(cell: Vector2i) -> void:
-	_paint(cell)
-	
-func _end_drag() -> void:
-	_dragging = false
-	if _stroke.is_empty():
-		return
-	var last: Vector2i = _stroke[-1]
-	if _flow.has(last) and not _leads_somewhere(last):
-		_flow[last] = _default_out(last, _incoming_dir(last))
-		_rebuild_path()
-	_stroke.clear()
-	
-func _paint(cell: Vector2i) -> void:
-	if level == null or not is_in_bounds(cell):
-		return
-	if not _stroke.is_empty():
-		var prev: Vector2i = _stroke[-1]
-		if cell == prev:
-			return
-		if _is_adjacent(prev, cell):
-			_flow[prev] = _dir_between(prev, cell)
-		else:
-			_stroke.clear()
-	if _locked.has(cell):
-		_stroke.clear() # generator/sink: connect into it, but don't build on it
-		_rebuild_path()
-		return
-	if not _flow.has(cell):
-		if _flow.size() >= level.conveyors:
-			return
-		var a := _incoming_dir(cell)
-		_flow[cell] = _dir_between(_stroke[-1], cell) if not _stroke.is_empty() else _default_out(cell, a)
-	_stroke.append(cell)
-	_retarget_dangling(cell)
-	_rebuild_path()
-	
-func _default_out(cell: Vector2i, a: int) -> int:
-	for i in 4:
-		if a >= 0 and i == (a + 2) % 4:
-			continue # never point back at the feeder
-		if cell + ORTHO[i] == _sink_cell and i == _sink_dir:
-			return i
-	for i in 4:
-		if a >= 0 and i == (a + 2) % 4:
-			continue
-		var n: Vector2i = cell + ORTHO[i]
-		if _flow.has(n) and n + ORTHO[_flow[n]] != cell:
-			return i # a belt that isn't already feeding us
-	return a if a >= 0 else _source_dir
-	
-func _incoming_dir(cell: Vector2i) -> int:
-	if _source_cell + ORTHO[_source_dir] == cell:
-		return _source_dir
-	for key in _flow:
-		var n: Vector2i = key
-		if n + ORTHO[_flow[n]] == cell:
-			return _flow[n]
-	return -1
-
-func _rebuild_path() -> void:
-	for y in grid_height:
-		for x in grid_width:
-			var c := Vector2i(x, y)
-			if _locked.has(c) or grid[y][x] == null:
-				continue
-			grid[y][x] = null
-			base_layer.erase_cell(board_to_map(c))
-			
-	for key in _flow:
-		var cell: Vector2i = key
-		var b: int = _flow[cell]
-		var a := _incoming_dir(cell)
-		if a < 0 or a == (b + 2) % 4:
-			a = b # unfed, or a U-turn — draw it straight
-		var piece := _piece_for(a, b)
-		if piece.is_empty():
-			continue
-		var t := Tile.new()
-		t.type = piece["type"]
-		t.rotation = piece["rotation"]
-		_put_tile(cell, t)
-
-	_sync_modifiers()
-	path_changed.emit()
-	inventory_changed.emit()
-	
-func _leads_somewhere(cell: Vector2i) -> bool:
-	var t: Vector2i = cell + ORTHO[_flow[cell]]
-	return t == _sink_cell or _flow.has(t)
-
-func _retarget_dangling(around: Vector2i) -> void:
-	for i in 4:
-		var n: Vector2i = around + ORTHO[i]
-		if not _flow.has(n) or _leads_somewhere(n):
-			continue
-		if _incoming_dir(n) == i:
-			continue # `around` feeds n — pointing back makes a 2-cycle
-		_flow[n] = (i + 2) % 4
-
-func _sync_modifiers() -> void:
-	for y in grid_height:
-		for x in grid_width:
-			var m: Tile = modifiers[y][x]
-			if m == null:
-				continue
-			var cell := Vector2i(x, y)
-			var host: Tile = grid[y][x]
-			if host != null and host.type.accepts_modifiers:
-				m.rotation = host.rotation
-				modifiers_layer.set_cell(board_to_map(cell), _source_id(modifiers_layer, m.type.texture), m.type.atlas_coords, _rotation_to_alt(m.rotation))
-			else:
-				modifiers[y][x] = null
-				modifiers_layer.erase_cell(board_to_map(cell))
-				if _remaining.has(m.type):
-					_remaining[m.type] += 1
+func current_slot() -> InventorySlot:
+	if session.level == null or current_slot_index >= session.level.inventory.size():
+		return null
+	return session.level.inventory[current_slot_index]
 
 func _rotation_for(cell: Vector2i, type: TileType) -> int:
 	if type.placement == TileType.Placement.MODIFIER:
-		var host := get_tile(cell, TileType.Placement.BASE)
+		var host := board.get_tile(cell, TileType.Placement.BASE)
 		if host:
 			return host.rotation
 	return current_rotation
-	
-func _rotation_to_alt(rot: int) -> int:
-	match rot:
-		1: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_H
-		2: return TileSetAtlasSource.TRANSFORM_FLIP_H | TileSetAtlasSource.TRANSFORM_FLIP_V
-		3: return TileSetAtlasSource.TRANSFORM_TRANSPOSE | TileSetAtlasSource.TRANSFORM_FLIP_V
-		_: return 0
-		
-func current_type() -> TileType:
-	return database.types[current_type_index]
-
-func board_to_map(cell: Vector2i) -> Vector2i:
-	return cell + GRID_ORIGIN
-
-func map_to_board(map_cell: Vector2i) -> Vector2i:
-	return map_cell - GRID_ORIGIN

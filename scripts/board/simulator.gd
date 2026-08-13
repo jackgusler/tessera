@@ -10,7 +10,7 @@ class Result extends RefCounted:
 	var path: Array[Vector2i] = []
 	var error: String = ""
 
-static func run(board: BoardController) -> Result:
+static func run(board: Board) -> Result:
 	var res := Result.new()
 	
 	var cell := board.find_cell_by_category(TileType.Category.SOURCE)
@@ -32,12 +32,12 @@ static func run(board: BoardController) -> Result:
 		if out_mask == 0:
 			res.error = "Tile at %s has no output." % cell
 			return res
-		var dir_index := BoardController.dir_index(out_mask)
+		var dir_index := Board.dir_index(out_mask))
 		if dir_index < 0:
 			res.error = "Tile at %s has multiple outputs (mask %d)." % [cell, out_mask]
 			return res
 			
-		var next: Vector2i = cell + BoardController.ORTHO[dir_index]
+		var next: Vector2i = cell + Board.ORTHO[dir_index]
 		if not board.is_in_bounds(next):
 			res.error = "Path runs off the board at %s." % next
 			return res

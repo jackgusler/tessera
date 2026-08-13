@@ -3,7 +3,7 @@ extends HBoxContainer
 @export var board: BoardController
 
 func _ready() -> void:
-	board.inventory_changed.connect(_rebuild)
+	board.session.inventory_changed.connect(_rebuild)
 
 func _rebuild() -> void:
 	for child in get_children():
@@ -13,19 +13,19 @@ func _rebuild() -> void:
 	var group := ButtonGroup.new()
 
 	var belt_btn := Button.new()
-	belt_btn.text = "Conveyors (%d)" % board.conveyors_left()
+	belt_btn.text = "Conveyors (%d)" % board.router.conveyors_left()
 	belt_btn.toggle_mode = true
 	belt_btn.button_group = group
 	belt_btn.button_pressed = board.belt_mode
 	belt_btn.pressed.connect(_on_belt_pressed)
 	add_child(belt_btn)
 
-	if board.level == null:
+	if board.session.level == null:
 		return
 
-	for i in board.level.inventory.size():
-		var slot: InventorySlot = board.level.inventory[i]
-		var left := board.remaining(slot.type)
+	for i in board.session.level.inventory.size():
+		var slot: InventorySlot = board.session.level.inventory[i]
+		var left := board.session.remaining(slot.type)
 		var btn := Button.new()
 		btn.text = _slot_label(slot, left)
 		btn.toggle_mode = true
