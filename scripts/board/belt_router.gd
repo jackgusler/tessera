@@ -75,6 +75,19 @@ func apply_to_board() -> void:
 		t.rotation = piece["rotation"]
 		_board.set_tile(cell, t)
 
+func preview_piece(cell: Vector2i) -> Dictionary:
+	if not _board.is_in_bounds(cell) or _board.is_locked(cell):
+		return {}
+	if flow.has(cell) or flow.size() >= budget:
+		return {}
+	var a := _incoming_dir(cell)
+	var b := _default_out(cell, a)
+	if b < 0:
+		return {}
+	if a < 0 or a == (b + 2) % 4:
+		a = b # unfed, or a U-turn — draw it straight
+	return _piece_for(a, b)
+
 func _paint(cell: Vector2i) -> bool:
 	if not _board.is_in_bounds(cell):
 		return false

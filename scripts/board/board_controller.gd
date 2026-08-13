@@ -115,12 +115,16 @@ func _remove_tile(cell: Vector2i, placement: int = TileType.Placement.BASE) -> v
 	view.render(board)
 
 func _update_ghost() -> void:
-	var slot := current_slot()
-	if slot == null:
-		view.hide_ghost()
-		return
 	var cell := view.cell_under_mouse()
-	if not session.can_place(cell, slot.type):
+	if belt_mode:
+		var piece := router.preview_piece(cell)
+		if piece.is_empty():
+			view.hide_ghost()
+		else:
+			view.show_ghost(cell, piece["type"], piece["rotation"])
+		return
+	var slot := current_slot()
+	if slot == null or not session.can_place(cell, slot.type):
 		view.hide_ghost()
 		return
 	view.show_ghost(cell, slot.type, _rotation_for(cell, slot.type))

@@ -19,7 +19,6 @@
 [ext_resource type="Resource" uid="uid://fkh1spgsp3hh" path="res://types/tiles/belt/corner_left.tres" id="9_yc10j"]
 [ext_resource type="Texture2D" uid="uid://oi7gkkxmmmnl" path="res://assets/pngs/base/straight.png" id="10_a8y0u"]
 [ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://types/tiles/belt/corner_right.tres" id="10_jscy8"]
-[ext_resource type="Resource" uid="uid://b62jnwc6tbyo" path="res://types/tiles/tile_database.tres" id="11_pm3ni"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_85g3d"]
 texture = ExtResource("2_tbgi4")
@@ -156,7 +155,6 @@ script = ExtResource("7_jbj1t")
 belt_straight = ExtResource("8_gqmmt")
 belt_corner_left = ExtResource("9_yc10j")
 belt_corner_right = ExtResource("10_jscy8")
-database = ExtResource("11_pm3ni")
 
 [node name="ColorRect" type="ColorRect" parent="BoardContainer" unique_id=839329519]
 custom_minimum_size = Vector2(480, 270)
