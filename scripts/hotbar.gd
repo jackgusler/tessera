@@ -38,9 +38,9 @@ func _rebuild() -> void:
 func _slot_label(slot: InventorySlot, left: int) -> String:
 	var s := ""
 	match slot.type.category:
-		TileType.Category.ADDER:      s = " +%s" % slot.stat
+		TileType.Category.ADDER: s = " +%s" % slot.stat
 		TileType.Category.MULTIPLIER: s = " ×%s" % slot.stat
-		TileType.Category.UPGRADER:   s = " ▲"
+		TileType.Category.UPGRADER: s = " ▲"
 		TileType.Category.DOWNGRADER: s = " ▼"
 	return "%s%s (%d)" % [slot.type.display_name, s, left]
 

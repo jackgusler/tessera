@@ -26,13 +26,14 @@ var _locked: Dictionary = {}
 
 signal path_changed
 
-var _flow: Dictionary = {}          # Vector2i -> outgoing direction index
-var _stroke: Array[Vector2i] = []   # cells painted in the current drag
+var _flow: Dictionary = {} # Vector2i -> outgoing direction index
+var _stroke: Array[Vector2i] = [] # cells painted in the current drag
 var _source_cell := Vector2i(-1, -1)
 var _sink_cell := Vector2i(-1, -1)
 var _source_dir: int = -1 # direction index leaving the generator
 var _sink_dir: int = -1 # direction index travelling INTO the sink
 var _dragging: bool = false
+var _erasing: bool = false
 var belt_mode: bool = true
 
 var _source_by_texture: Dictionary = {}
@@ -118,19 +119,25 @@ func layer_for(type: TileType) -> TileMapLayer:
 		_: return base_layer
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			if belt_mode:
-				_begin_drag(_cell_under_mouse())
-			else:
-				_handle_left_click()
-		else:
-			_dragging = false
-	elif event is InputEventMouseMotion and _dragging:
-		_extend_drag(_cell_under_mouse())
-	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-		_handle_right_click()
-		current_rotation = (current_rotation + 1) % 4
+	if event is InputEventMouseButton:
+		match event.button_index:
+			MOUSE_BUTTON_LEFT:
+				if event.pressed:
+					if belt_mode:
+						_begin_drag(_cell_under_mouse())
+					else:
+						_handle_left_click()
+				else:
+					_dragging = false
+			MOUSE_BUTTON_RIGHT:
+				_erasing = event.pressed
+				if event.pressed:
+					_handle_right_click()
+	elif event is InputEventMouseMotion:
+		if _erasing:
+			_handle_right_click()
+		elif _dragging and belt_mode:
+			_extend_drag(_cell_under_mouse())
 
 func can_place(cell: Vector2i, type: TileType) -> bool:
 	if not is_in_bounds(cell):
@@ -349,18 +356,30 @@ func _paint(cell: Vector2i) -> void:
 		else:
 			_stroke.clear()
 	if _locked.has(cell):
-		_stroke.clear()       # generator/sink: connect into it, but don't build on it
+		_stroke.clear() # generator/sink: connect into it, but don't build on it
 		_rebuild_path()
 		return
 	if not _flow.has(cell):
 		if _flow.size() >= level.conveyors:
 			return
-		_flow[cell] = _dir_between(_stroke[-1], cell) if not _stroke.is_empty() else _default_dir(cell)
+		var a := _incoming_dir(cell)
+		_flow[cell] = _dir_between(_stroke[-1], cell) if not _stroke.is_empty() else _default_out(cell, a)
 	_stroke.append(cell)
+	_retarget_dangling(cell)
 	_rebuild_path()
 	
-func _default_dir(cell: Vector2i) -> int:
-	var a := _incoming_dir(cell)
+func _default_out(cell: Vector2i, a: int) -> int:
+	for i in 4:
+		if a >= 0 and i == (a + 2) % 4:
+			continue # never point back at the feeder
+		if cell + ORTHO[i] == _sink_cell and i == _sink_dir:
+			return i
+	for i in 4:
+		if a >= 0 and i == (a + 2) % 4:
+			continue
+		var n: Vector2i = cell + ORTHO[i]
+		if _flow.has(n) and n + ORTHO[_flow[n]] != cell:
+			return i # a belt that isn't already feeding us
 	return a if a >= 0 else _source_dir
 	
 func _incoming_dir(cell: Vector2i) -> int:
@@ -386,7 +405,7 @@ func _rebuild_path() -> void:
 		var b: int = _flow[cell]
 		var a := _incoming_dir(cell)
 		if a < 0 or a == (b + 2) % 4:
-			a = b                       # unfed, or a U-turn — draw it straight
+			a = b # unfed, or a U-turn — draw it straight
 		var piece := _piece_for(a, b)
 		if piece.is_empty():
 			continue
@@ -398,6 +417,19 @@ func _rebuild_path() -> void:
 	_sync_modifiers()
 	path_changed.emit()
 	inventory_changed.emit()
+	
+func _leads_somewhere(cell: Vector2i) -> bool:
+	var t: Vector2i = cell + ORTHO[_flow[cell]]
+	return t == _sink_cell or _flow.has(t)
+
+func _retarget_dangling(around: Vector2i) -> void:
+	for i in 4:
+		var n: Vector2i = around + ORTHO[i]
+		if not _flow.has(n) or _leads_somewhere(n):
+			continue
+		if _incoming_dir(n) == i:
+			continue # `around` feeds n — pointing back makes a 2-cycle
+		_flow[n] = (i + 2) % 4
 
 func _sync_modifiers() -> void:
 	for y in grid_height:
