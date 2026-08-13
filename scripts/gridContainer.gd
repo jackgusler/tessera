@@ -128,7 +128,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					else:
 						_handle_left_click()
 				else:
-					_dragging = false
+					_end_drag()
 			MOUSE_BUTTON_RIGHT:
 				_erasing = event.pressed
 				if event.pressed:
@@ -343,6 +343,16 @@ func _begin_drag(cell: Vector2i) -> void:
 
 func _extend_drag(cell: Vector2i) -> void:
 	_paint(cell)
+	
+func _end_drag() -> void:
+	_dragging = false
+	if _stroke.is_empty():
+		return
+	var last: Vector2i = _stroke[-1]
+	if _flow.has(last) and not _leads_somewhere(last):
+		_flow[last] = _default_out(last, _incoming_dir(last))
+		_rebuild_path()
+	_stroke.clear()
 	
 func _paint(cell: Vector2i) -> void:
 	if level == null or not is_in_bounds(cell):
