@@ -32,7 +32,7 @@ static func run(board: gridContainer) -> Result:
 		if out_mask == 0:
 			res.error = "Tile at %s has no output." % cell
 			return res
-		var dir_index := _single_dir(out_mask)
+		var dir_index := dir_index(out_mask)
 		if dir_index < 0:
 			res.error = "Tile at %s has multiple outputs (mask %d)." % [cell, out_mask]
 			return res
@@ -65,15 +65,6 @@ static func run(board: gridContainer) -> Result:
 			
 	res.error = "Path loops."
 	return res
-
-static func _single_dir(mask: int) -> int:
-	match mask:
-		1: return 0   # Right
-		2: return 1   # Down
-		4: return 2   # Left
-		8: return 3   # Up
-		_: return -1  # zero or multi-bit
-	return -1
 	
 static func _opposite(bit: int) -> int:
 	return ((bit << 2) | (bit >> 2)) & 0b1111

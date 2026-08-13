@@ -14,12 +14,11 @@ func _rebuild() -> void:
 		var slot: InventorySlot = board.level.inventory[i]
 		var left := board.remaining(slot.type)
 		var btn := Button.new()
-		btn.text = _slot_label(slot, left)
+		btn.text = "Conveyors (%d)" % board.conveyors_left()
 		btn.toggle_mode = true
 		btn.button_group = group
-		btn.disabled = left <= 0
-		btn.button_pressed = (i == board.current_slot_index)
-		btn.pressed.connect(_on_slot_pressed.bind(i))
+		btn.button_pressed = board.belt_mode
+		btn.pressed.connect(func(): board.belt_mode = true)
 		add_child(btn)
 
 func _on_slot_pressed(index: int) -> void:

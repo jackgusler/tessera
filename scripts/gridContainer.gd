@@ -11,6 +11,10 @@ signal run_failed(reason: String)
 @onready var modifiers_layer: TileMapLayer = $Modifiers
 @onready var preview: TileMapLayer = $Preview
 
+@export var belt_straight: TileType
+@export var belt_corner_left: TileType
+@export var belt_corner_right: TileType
+
 @export var database: TileDatabase
 @export var grid_width: int = 6
 @export var grid_height: int = 6
@@ -20,10 +24,20 @@ signal run_failed(reason: String)
 var _remaining: Dictionary = {}
 var _locked: Dictionary = {}
 
+signal path_changed
+
+var _path: Array[Vector2i] = []
+var _source_cell := Vector2i(-1, -1)
+var _sink_cell := Vector2i(-1, -1)
+var _source_dir: int = -1 # direction index leaving the generator
+var _sink_dir: int = -1 # direction index travelling INTO the sink
+var _dragging: bool = false
+var belt_mode: bool = true
+
 var _source_by_texture: Dictionary = {}
 
 var current_type_index: int = 0
-var current_rotation: int = 0   # 0..3
+var current_rotation: int = 0 # 0..3
 
 var current_slot_index: int = 0
 
@@ -69,6 +83,11 @@ func load_level(l: Level) -> void:
 	for slot in l.inventory:
 		_remaining[slot.type] = slot.count
 	inventory_changed.emit()
+	_path.clear()
+	_source_cell = find_cell_by_category(TileType.Category.SOURCE)
+	_sink_cell = find_cell_by_category(TileType.Category.SINK)
+	_source_dir = dir_index(get_tile(_source_cell).rotated_outputs())
+	_sink_dir = (dir_index(get_tile(_sink_cell).rotated_inputs()) + 2) % 4
 	
 
 func _board_for(placement: int) -> Array:
@@ -98,11 +117,18 @@ func layer_for(type: TileType) -> TileMapLayer:
 		_: return base_layer
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		_handle_left_click()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			if belt_mode:
+				_begin_drag(_cell_under_mouse())
+			else:
+				_handle_left_click()
+		else:
+			_dragging = false
+	elif event is InputEventMouseMotion and _dragging:
+		_extend_drag(_cell_under_mouse())
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		_handle_right_click()
-	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		current_rotation = (current_rotation + 1) % 4
 
 func can_place(cell: Vector2i, type: TileType) -> bool:
@@ -143,8 +169,10 @@ func _handle_right_click() -> void:
 		return
 	if not is_empty(cell, TileType.Placement.MODIFIER):
 		remove_tile(cell, TileType.Placement.MODIFIER)
-	elif not is_empty(cell, TileType.Placement.BASE):
-		remove_tile(cell, TileType.Placement.BASE)
+		return
+	var i := _path.find(cell)
+	if i >= 0:
+		_truncate_to(i)
 	
 func _update_ghost() -> void:
 	preview.clear()
@@ -270,18 +298,127 @@ func get_neighbors(cell: Vector2i) -> Array[Vector2i]:
 			out.append(n)
 	return out
 	
-func _dir_index(from: Vector2i, to: Vector2i) -> int:
+static func dir_index(mask: int) -> int:
+	match mask:
+		1: return 0 # Right
+		2: return 1 # Down
+		4: return 2 # Left
+		8: return 3 # Up
+		_: return -1 # zero or multi-bit
+	return -1
+
+func path_head() -> Vector2i:
+	return _path[-1] if not _path.is_empty() else _source_cell
+
+func _final_belt_cell() -> Vector2i:
+	return _sink_cell - ORTHO[_sink_dir]
+
+func conveyors_left() -> int:
+	return level.conveyors - _path.size()
+
+func _dir_between(from: Vector2i, to: Vector2i) -> int:
 	return ORTHO.find(to - from)
-	
+
+func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
+	var d: Vector2i = b - a
+	return absi(d.x) + absi(d.y) == 1
+
 func _piece_for(a: int, b: int) -> Dictionary:
 	if b == a:
-		return { "type": database.belt_straight,     "rotation": (b + 1) % 4 }
+		return {"type": belt_straight, "rotation": (b + 1) % 4}
 	if b == (a + 1) % 4:
-		return { "type": database.belt_corner_right, "rotation": b }
+		return {"type": belt_corner_right, "rotation": b}
 	if b == (a + 3) % 4:
-		return { "type": database.belt_corner_left,  "rotation": (b + 2) % 4 }
-	return {} 
-	
+		return {"type": belt_corner_left, "rotation": (b + 2) % 4}
+	return {}
+
+func _begin_drag(cell: Vector2i) -> void:
+	if cell == _source_cell:
+		_truncate_to(0)
+		_dragging = true
+		return
+	var i := _path.find(cell)
+	if i >= 0:
+		_truncate_to(i + 1)
+		_dragging = true
+
+func _extend_drag(cell: Vector2i) -> void:
+	if not is_in_bounds(cell):
+		return
+	if _path.size() >= 2 and cell == _path[-2]:
+		_truncate_to(_path.size() - 1)
+		return
+	if _path.size() == 1 and cell == _source_cell:
+		_truncate_to(0)
+		return
+	_try_append(cell)
+
+func _try_append(cell: Vector2i) -> void:
+	if _path.size() >= level.conveyors:
+		return
+	if cell == _source_cell or cell == _sink_cell or _path.has(cell):
+		return
+	if not _is_adjacent(path_head(), cell):
+		return
+	if _path.is_empty() and cell != _source_cell + ORTHO[_source_dir]:
+		return
+	_path.append(cell)
+	_rebuild_path()
+
+func _truncate_to(size: int) -> void:
+	if size >= _path.size():
+		return
+	_path.resize(size)
+	_rebuild_path()
+
+func _rebuild_path() -> void:
+	for y in grid_height:
+		for x in grid_width:
+			var c := Vector2i(x, y)
+			if _locked.has(c) or grid[y][x] == null:
+				continue
+			grid[y][x] = null
+			base_layer.erase_cell(board_to_map(c))
+
+	var final_cell := _final_belt_cell()
+	for i in _path.size():
+		var cell: Vector2i = _path[i]
+		var prev: Vector2i = _source_cell if i == 0 else _path[i - 1]
+		var a := _dir_between(prev, cell)
+		var b := a
+		if i + 1 < _path.size():
+			b = _dir_between(cell, _path[i + 1])
+		elif cell == final_cell:
+			b = _sink_dir
+		var piece := _piece_for(a, b)
+		if piece.is_empty():
+			continue
+		var t := Tile.new()
+		t.type = piece["type"]
+		t.rotation = piece["rotation"]
+		_put_tile(cell, t)
+
+	_sync_modifiers()
+	path_changed.emit()
+	inventory_changed.emit()
+
+func _sync_modifiers() -> void:
+	for y in grid_height:
+		for x in grid_width:
+			var m: Tile = modifiers[y][x]
+			if m == null:
+				continue
+			var cell := Vector2i(x, y)
+			var host: Tile = grid[y][x]
+			if host != null and host.type.accepts_modifiers:
+				m.rotation = host.rotation
+				modifiers_layer.set_cell(board_to_map(cell), _source_id(modifiers_layer, m.type.texture), m.type.atlas_coords, _rotation_to_alt(m.rotation))
+			else:
+				modifiers[y][x] = null
+				modifiers_layer.erase_cell(board_to_map(cell))
+				if _remaining.has(m.type):
+					_remaining[m.type] += 1
+
 func _rotation_for(cell: Vector2i, type: TileType) -> int:
 	if type.placement == TileType.Placement.MODIFIER:
 		var host := get_tile(cell, TileType.Placement.BASE)

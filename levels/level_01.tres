@@ -47,6 +47,7 @@ metadata/_custom_type_script = "uid://bh242m3g33kps"
 script = ExtResource("3_uktp3")
 display_name = "The Basics"
 target = 6.0
+conveyors = 3
 fixed_tiles = Array[ExtResource("1_dpay0")]([SubResource("Resource_wcxux"), SubResource("Resource_w34c6")])
 inventory = Array[ExtResource("2_7h3od")]([SubResource("Resource_yfxnx"), SubResource("Resource_lp0yu"), SubResource("Resource_u7125")])
 metadata/_custom_type_script = "uid://c4x2dxuld1fle"
