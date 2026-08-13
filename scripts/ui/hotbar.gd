@@ -1,6 +1,6 @@
 extends HBoxContainer
 
-@export var board: gridContainer
+@export var board: BoardController
 
 func _ready() -> void:
 	board.inventory_changed.connect(_rebuild)

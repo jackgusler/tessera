@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TileType" format=3 uid="uid://c1hgw7615kk5r"]
 
-[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/tile_type.gd" id="1_3bxjf"]
+[ext_resource type="Script" uid="uid://c1lwj6joykwhp" path="res://scripts/resources/tile_type.gd" id="1_3bxjf"]
 [ext_resource type="Texture2D" uid="uid://bvglyaww7olc3" path="res://assets/pngs/modifiers/upgrader.png" id="2_2wijy"]
 
 [resource]

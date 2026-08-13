@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Level" format=3 uid="uid://4rp88cb0vbfi"]
 
-[ext_resource type="Script" uid="uid://bomy2fjairq57" path="res://scripts/placed_tile.gd" id="1_48nat"]
-[ext_resource type="Script" uid="uid://bh242m3g33kps" path="res://scripts/inventory_slot.gd" id="2_oagrl"]
+[ext_resource type="Script" uid="uid://bomy2fjairq57" path="res://scripts/resources/placed_tile.gd" id="1_48nat"]
+[ext_resource type="Script" uid="uid://bh242m3g33kps" path="res://scripts/resources/inventory_slot.gd" id="2_oagrl"]
 [ext_resource type="Resource" uid="uid://76eonk5qulcb" path="res://types/tiles/source/generator.tres" id="2_tqtu8"]
 [ext_resource type="Resource" uid="uid://wkfdd6p767ul" path="res://types/tiles/sink/output.tres" id="3_8bdtk"]
-[ext_resource type="Script" uid="uid://c4x2dxuld1fle" path="res://scripts/level.gd" id="3_p27re"]
+[ext_resource type="Script" uid="uid://c4x2dxuld1fle" path="res://scripts/resources/level.gd" id="3_p27re"]
 [ext_resource type="Resource" uid="uid://cluh3q7y36kdd" path="res://types/tiles/adder/adder.tres" id="8_ws5oe"]
 [ext_resource type="Resource" uid="uid://c1hgw7615kk5r" path="res://types/tiles/upgrader/upgrader.tres" id="9_6382i"]
 [ext_resource type="Resource" uid="uid://bhi4vejlu2esf" path="res://types/tiles/downgrader/downgrader.tres" id="10_xfjkr"]

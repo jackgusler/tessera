@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var board: gridContainer = $GridContainer
+@onready var board: BoardController = $BoardContainer
 
 @export var levels: Array[Level]
 

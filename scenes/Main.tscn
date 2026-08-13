@@ -1,25 +1,21 @@
 [gd_scene format=4 uid="uid://d2oxca3mm1nrh"]
 
-[ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/main.gd" id="1_o5qli"]
-[ext_resource type="Script" uid="uid://dayrljv6d8x52" path="res://scripts/hotbar.gd" id="2_85g3d"]
-[ext_resource type="Script" uid="uid://c4x2dxuld1fle" path="res://scripts/level.gd" id="2_jkv2x"]
+[ext_resource type="Script" uid="uid://73uqnoyr2t8v" path="res://scripts/ui/main.gd" id="1_o5qli"]
+[ext_resource type="Script" uid="uid://dayrljv6d8x52" path="res://scripts/ui/hotbar.gd" id="2_85g3d"]
+[ext_resource type="Script" uid="uid://c4x2dxuld1fle" path="res://scripts/resources/level.gd" id="2_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://slq7rm6lh54p" path="res://assets/grid.png" id="2_tbgi4"]
-[ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/gridContainer.gd" id="2_tefeu"]
 [ext_resource type="Resource" uid="uid://bdhrvwsqpcia8" path="res://levels/level_02.tres" id="4_jbj1t"]
-[ext_resource type="Resource" uid="uid://b62jnwc6tbyo" path="res://types/tiles/tile_database.tres" id="4_tipki"]
 [ext_resource type="Resource" uid="uid://wvko84r40abb" path="res://levels/level_01.tres" id="5_a8y0u"]
 [ext_resource type="Resource" uid="uid://4rp88cb0vbfi" path="res://levels/level_03.tres" id="5_muem4"]
 [ext_resource type="Texture2D" uid="uid://bwtwjb0wwbone" path="res://assets/pngs/base/corner.png" id="6_choun"]
 [ext_resource type="TileSet" uid="uid://dul267pmcfeo" path="res://assets/tilesets/base.tres" id="6_trceg"]
 [ext_resource type="TileSet" uid="uid://cgc8pd58kgwh8" path="res://assets/tilesets/items/item_1/item_1.tres" id="7_a8y0u"]
+[ext_resource type="Script" uid="uid://fnhi5giev3ah" path="res://scripts/board/board_controller.gd" id="7_jbj1t"]
 [ext_resource type="Texture2D" uid="uid://bkkxtyt4wpoyf" path="res://assets/pngs/base/corner_opposite.png" id="7_ya4ey"]
 [ext_resource type="Texture2D" uid="uid://djru301pjxqfk" path="res://assets/pngs/base/generator.png" id="8_eb6dy"]
-[ext_resource type="Resource" uid="uid://bswko1c7yfoe" path="res://types/tiles/belt/straight.tres" id="8_gqmmt"]
 [ext_resource type="TileSet" uid="uid://bmkvpk5pxvlww" path="res://assets/tilesets/modifiers.tres" id="8_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://devdtj0k6hwu5" path="res://assets/pngs/base/output.png" id="9_trceg"]
-[ext_resource type="Resource" uid="uid://fkh1spgsp3hh" path="res://types/tiles/belt/corner_left.tres" id="9_yc10j"]
 [ext_resource type="Texture2D" uid="uid://oi7gkkxmmmnl" path="res://assets/pngs/base/straight.png" id="10_a8y0u"]
-[ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://types/tiles/belt/corner_right.tres" id="10_jscy8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_85g3d"]
 texture = ExtResource("2_tbgi4")
@@ -146,20 +142,15 @@ levels = Array[ExtResource("2_jkv2x")]([ExtResource("5_a8y0u"), ExtResource("4_j
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("2_85g3d")
-board = NodePath("../../GridContainer")
+board = NodePath("../../BoardContainer")
 
-[node name="GridContainer" type="Node2D" parent="." unique_id=96922754]
+[node name="BoardContainer" type="Node2D" parent="." unique_id=96922754]
 texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(4, 4)
-script = ExtResource("2_tefeu")
-belt_straight = ExtResource("8_gqmmt")
-belt_corner_left = ExtResource("9_yc10j")
-belt_corner_right = ExtResource("10_jscy8")
-database = ExtResource("4_tipki")
-level = ExtResource("5_a8y0u")
+script = ExtResource("7_jbj1t")
 
-[node name="ColorRect" type="ColorRect" parent="GridContainer" unique_id=839329519]
+[node name="ColorRect" type="ColorRect" parent="BoardContainer" unique_id=839329519]
 custom_minimum_size = Vector2(480, 270)
 offset_left = -240.0
 offset_top = -135.0
@@ -168,19 +159,19 @@ offset_bottom = 135.0
 mouse_filter = 2
 color = Color(0.87058824, 0.85490197, 0.79607844, 1)
 
-[node name="Grid" type="TileMapLayer" parent="GridContainer" unique_id=107034912]
+[node name="Grid" type="TileMapLayer" parent="BoardContainer" unique_id=107034912]
 tile_map_data = PackedByteArray("AAD/////AAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAAAAAAAAAD//wAAAAAAAAAAAAD+//7/AAAAAAAAAAD9//3/AAAAAAAAAAD+//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAACAP3/AAAAAAAAAAACAAIAAAAAAAAAAAACAAEAAAAAAAAAAAACAAAAAAAAAAAAAAACAP//AAAAAAAAAAACAP7/AAAAAAAAAAABAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAD//wIAAAAAAAAAAAD+/wIAAAAAAAAAAAD9/wIAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wAAAAAAAAAAAAD9////AAAAAAAAAAD9//7/AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD//wEAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAAAAAAAAAAAAAABAP//AAAAAAAAAAABAP7/AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAABAAEAAAAAAAAAAAD+/wEAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_choun")
 
-[node name="Base" type="TileMapLayer" parent="GridContainer" unique_id=1614143978]
+[node name="Base" type="TileMapLayer" parent="BoardContainer" unique_id=1614143978]
 tile_set = ExtResource("6_trceg")
 
-[node name="Items" type="TileMapLayer" parent="GridContainer" unique_id=226166887]
+[node name="Items" type="TileMapLayer" parent="BoardContainer" unique_id=226166887]
 tile_set = ExtResource("7_a8y0u")
 
-[node name="Modifiers" type="TileMapLayer" parent="GridContainer" unique_id=355384796]
+[node name="Modifiers" type="TileMapLayer" parent="BoardContainer" unique_id=355384796]
 tile_set = ExtResource("8_jkv2x")
 
-[node name="Preview" type="TileMapLayer" parent="GridContainer" unique_id=1714269340]
+[node name="Preview" type="TileMapLayer" parent="BoardContainer" unique_id=1714269340]
 modulate = Color(1, 1, 1, 0.48235294)
 tile_set = SubResource("TileSet_jkv2x")

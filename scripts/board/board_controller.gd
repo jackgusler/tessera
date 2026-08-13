@@ -1,4 +1,4 @@
-class_name gridContainer
+class_name BoardController
 extends Node2D
 
 signal inventory_changed
@@ -312,7 +312,6 @@ static func dir_index(mask: int) -> int:
 		4: return 2 # Left
 		8: return 3 # Up
 		_: return -1 # zero or multi-bit
-	return -1
 
 func conveyors_left() -> int:
 	return level.conveyors - _flow.size()
