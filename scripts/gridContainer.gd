@@ -324,13 +324,16 @@ func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
 	return absi(d.x) + absi(d.y) == 1
 
 func _piece_for(a: int, b: int) -> Dictionary:
+	var type: TileType
 	if b == a:
-		return {"type": belt_straight, "rotation": (b + 1) % 4}
-	if b == (a + 1) % 4:
-		return {"type": belt_corner_right, "rotation": b}
-	if b == (a + 3) % 4:
-		return {"type": belt_corner_left, "rotation": (b + 2) % 4}
-	return {}
+		type = belt_straight
+	elif b == (a + 1) % 4:
+		type = belt_corner_right
+	elif b == (a + 3) % 4:
+		type = belt_corner_left
+	else:
+		return {}
+	return {"type": type, "rotation": (b - dir_index(type.outputs) + 4) % 4}
 
 func _begin_drag(cell: Vector2i) -> void:
 	_dragging = true
