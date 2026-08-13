@@ -26,7 +26,8 @@ var _locked: Dictionary = {}
 
 signal path_changed
 
-var _path: Array[Vector2i] = []
+var _flow: Dictionary = {}          # Vector2i -> outgoing direction index
+var _stroke: Array[Vector2i] = []   # cells painted in the current drag
 var _source_cell := Vector2i(-1, -1)
 var _sink_cell := Vector2i(-1, -1)
 var _source_dir: int = -1 # direction index leaving the generator
@@ -170,9 +171,8 @@ func _handle_right_click() -> void:
 	if not is_empty(cell, TileType.Placement.MODIFIER):
 		remove_tile(cell, TileType.Placement.MODIFIER)
 		return
-	var i := _path.find(cell)
-	if i >= 0:
-		_truncate_to(i)
+	if _flow.erase(cell):
+		_rebuild_path()
 	
 func _update_ghost() -> void:
 	preview.clear()
@@ -310,11 +310,8 @@ static func dir_index(mask: int) -> int:
 func path_head() -> Vector2i:
 	return _path[-1] if not _path.is_empty() else _source_cell
 
-func _final_belt_cell() -> Vector2i:
-	return _sink_cell - ORTHO[_sink_dir]
-
 func conveyors_left() -> int:
-	return level.conveyors - _path.size()
+	return level.conveyors - _flow.size()
 
 func _dir_between(from: Vector2i, to: Vector2i) -> int:
 	return ORTHO.find(to - from)
@@ -337,25 +334,46 @@ func _piece_for(a: int, b: int) -> Dictionary:
 
 func _begin_drag(cell: Vector2i) -> void:
 	_dragging = true
-	if cell == _source_cell:
-		_truncate_to(0)
-		return
-	var i := _path.find(cell)
-	if i >= 0:
-		_truncate_to(i + 1)
-		return
-	_try_append(cell)
+	_stroke.clear()
+	_paint(cell)
 
 func _extend_drag(cell: Vector2i) -> void:
-	if not is_in_bounds(cell):
+	_paint(cell)
+	
+func _paint(cell: Vector2i) -> void:
+	if level == null or not is_in_bounds(cell):
 		return
-	if _path.size() >= 2 and cell == _path[-2]:
-		_truncate_to(_path.size() - 1)
+	if not _stroke.is_empty():
+		var prev: Vector2i = _stroke[-1]
+		if cell == prev:
+			return
+		if _is_adjacent(prev, cell):
+			_flow[prev] = _dir_between(prev, cell)
+		else:
+			_stroke.clear()
+	if _locked.has(cell):
+		_stroke.clear()       # generator/sink: connect into it, but don't build on it
+		_rebuild_path()
 		return
-	if _path.size() == 1 and cell == _source_cell:
-		_truncate_to(0)
-		return
-	_try_append(cell)
+	if not _flow.has(cell):
+		if _flow.size() >= level.conveyors:
+			return
+		_flow[cell] = _dir_between(_stroke[-1], cell) if not _stroke.is_empty() else _default_dir(cell)
+	_stroke.append(cell)
+	_rebuild_path()
+	
+func _default_dir(cell: Vector2i) -> int:
+	var a := _incoming_dir(cell)
+	return a if a >= 0 else _source_dir
+	
+func _incoming_dir(cell: Vector2i) -> int:
+	if _source_cell + ORTHO[_source_dir] == cell:
+		return _source_dir
+	for key in _flow:
+		var n: Vector2i = key
+		if n + ORTHO[_flow[n]] == cell:
+			return _flow[n]
+	return -1
 
 func _try_append(cell: Vector2i) -> void:
 	if level == null or _path.size() >= level.conveyors:
@@ -385,17 +403,13 @@ func _rebuild_path() -> void:
 				continue
 			grid[y][x] = null
 			base_layer.erase_cell(board_to_map(c))
-
-	var final_cell := _final_belt_cell()
-	for i in _path.size():
-		var cell: Vector2i = _path[i]
-		var prev: Vector2i = _source_cell if i == 0 else _path[i - 1]
-		var a := _dir_between(prev, cell)
-		var b := a
-		if i + 1 < _path.size():
-			b = _dir_between(cell, _path[i + 1])
-		elif cell == final_cell:
-			b = _sink_dir
+			
+	for key in _flow:
+		var cell: Vector2i = key
+		var b: int = _flow[cell]
+		var a := _incoming_dir(cell)
+		if a < 0 or a == (b + 2) % 4:
+			a = b                       # unfed, or a U-turn — draw it straight
 		var piece := _piece_for(a, b)
 		if piece.is_empty():
 			continue

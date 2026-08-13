@@ -157,6 +157,9 @@ belt_straight = ExtResource("8_gqmmt")
 belt_corner_left = ExtResource("9_yc10j")
 belt_corner_right = ExtResource("10_jscy8")
 database = ExtResource("4_tipki")
+grid_width = null
+grid_height = null
+cell_size = null
 level = ExtResource("5_a8y0u")
 
 [node name="ColorRect" type="ColorRect" parent="GridContainer" unique_id=839329519]
