@@ -14,9 +14,12 @@
 [ext_resource type="TileSet" uid="uid://cgc8pd58kgwh8" path="res://assets/tilesets/items/item_1/item_1.tres" id="7_a8y0u"]
 [ext_resource type="Texture2D" uid="uid://bkkxtyt4wpoyf" path="res://assets/pngs/base/corner_opposite.png" id="7_ya4ey"]
 [ext_resource type="Texture2D" uid="uid://djru301pjxqfk" path="res://assets/pngs/base/generator.png" id="8_eb6dy"]
+[ext_resource type="Resource" uid="uid://bswko1c7yfoe" path="res://types/tiles/belt/straight.tres" id="8_gqmmt"]
 [ext_resource type="TileSet" uid="uid://bmkvpk5pxvlww" path="res://assets/tilesets/modifiers.tres" id="8_jkv2x"]
 [ext_resource type="Texture2D" uid="uid://devdtj0k6hwu5" path="res://assets/pngs/base/output.png" id="9_trceg"]
+[ext_resource type="Resource" uid="uid://fkh1spgsp3hh" path="res://types/tiles/belt/corner_left.tres" id="9_yc10j"]
 [ext_resource type="Texture2D" uid="uid://oi7gkkxmmmnl" path="res://assets/pngs/base/straight.png" id="10_a8y0u"]
+[ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://types/tiles/belt/corner_right.tres" id="10_jscy8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_85g3d"]
 texture = ExtResource("2_tbgi4")
@@ -150,6 +153,9 @@ texture_filter = 1
 position = Vector2(960, 540)
 scale = Vector2(4, 4)
 script = ExtResource("2_tefeu")
+belt_straight = ExtResource("8_gqmmt")
+belt_corner_left = ExtResource("9_yc10j")
+belt_corner_right = ExtResource("10_jscy8")
 database = ExtResource("4_tipki")
 level = ExtResource("5_a8y0u")
 

@@ -5,8 +5,6 @@
 [ext_resource type="Resource" uid="uid://76eonk5qulcb" path="res://types/tiles/source/generator.tres" id="2_p7dop"]
 [ext_resource type="Resource" uid="uid://wkfdd6p767ul" path="res://types/tiles/sink/output.tres" id="3_e4cd2"]
 [ext_resource type="Script" uid="uid://c4x2dxuld1fle" path="res://scripts/level.gd" id="3_p7dop"]
-[ext_resource type="Resource" uid="uid://bswko1c7yfoe" path="res://types/tiles/belt/straight.tres" id="5_l15gc"]
-[ext_resource type="Resource" uid="uid://bqsxsq4p2eira" path="res://types/tiles/belt/corner_right.tres" id="6_cgfcy"]
 [ext_resource type="Resource" uid="uid://cluh3q7y36kdd" path="res://types/tiles/adder/adder.tres" id="7_or8m2"]
 [ext_resource type="Resource" uid="uid://c0wtf88ava41d" path="res://types/tiles/multiplier/multiplier.tres" id="8_w06pi"]
 
@@ -25,17 +23,6 @@ cell = Vector2i(3, 4)
 rotation = 2
 metadata/_custom_type_script = "uid://bomy2fjairq57"
 
-[sub_resource type="Resource" id="Resource_ojbec"]
-script = ExtResource("2_ebs2p")
-type = ExtResource("5_l15gc")
-count = 3
-metadata/_custom_type_script = "uid://bh242m3g33kps"
-
-[sub_resource type="Resource" id="Resource_c5e36"]
-script = ExtResource("2_ebs2p")
-type = ExtResource("6_cgfcy")
-metadata/_custom_type_script = "uid://bh242m3g33kps"
-
 [sub_resource type="Resource" id="Resource_ibbsg"]
 script = ExtResource("2_ebs2p")
 type = ExtResource("7_or8m2")
@@ -52,6 +39,7 @@ metadata/_custom_type_script = "uid://bh242m3g33kps"
 script = ExtResource("3_p7dop")
 display_name = "Around the Bend"
 target = 9.0
+conveyors = 4
 fixed_tiles = Array[ExtResource("1_biwnt")]([SubResource("Resource_1p2ry"), SubResource("Resource_2nst3")])
-inventory = Array[ExtResource("2_ebs2p")]([SubResource("Resource_ojbec"), SubResource("Resource_c5e36"), SubResource("Resource_ibbsg"), SubResource("Resource_vqgm8")])
+inventory = Array[ExtResource("2_ebs2p")]([SubResource("Resource_ibbsg"), SubResource("Resource_vqgm8")])
 metadata/_custom_type_script = "uid://c4x2dxuld1fle"
