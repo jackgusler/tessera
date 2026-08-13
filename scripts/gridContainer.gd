@@ -333,14 +333,15 @@ func _piece_for(a: int, b: int) -> Dictionary:
 	return {}
 
 func _begin_drag(cell: Vector2i) -> void:
+	_dragging = true
 	if cell == _source_cell:
 		_truncate_to(0)
-		_dragging = true
 		return
 	var i := _path.find(cell)
 	if i >= 0:
 		_truncate_to(i + 1)
-		_dragging = true
+		return
+	_try_append(cell)
 
 func _extend_drag(cell: Vector2i) -> void:
 	if not is_in_bounds(cell):
@@ -354,6 +355,8 @@ func _extend_drag(cell: Vector2i) -> void:
 	_try_append(cell)
 
 func _try_append(cell: Vector2i) -> void:
+	if level == null or _path.size() >= level.conveyors:
+		return
 	if _path.size() >= level.conveyors:
 		return
 	if cell == _source_cell or cell == _sink_cell or _path.has(cell):
